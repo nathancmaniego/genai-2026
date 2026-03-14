@@ -1,3 +1,4 @@
+import io
 import os
 import json
 import base64
@@ -5,6 +6,11 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
+import numpy as np
+import mediapipe as mp
+from mediapipe.tasks import python as mp_python
+from mediapipe.tasks.python import vision as mp_vision
+from PIL import Image
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,6 +38,20 @@ if not SCAN_LOG_PATH.exists():
     SCAN_LOG_PATH.write_text("[]")
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY", ""))
+
+_MODEL_PATH = Path(__file__).parent / "hand_landmarker.task"
+_base_options = mp_python.BaseOptions(model_asset_path=str(_MODEL_PATH))
+_landmarker_options = mp_vision.HandLandmarkerOptions(
+    base_options=_base_options,
+    num_hands=1,
+    min_hand_detection_confidence=0.7,
+)
+hands_detector = mp_vision.HandLandmarker.create_from_options(_landmarker_options)
+
+FINGERTIP_IDS = [4, 8, 12, 16, 20]
+MCP_IDS = [2, 5, 9, 13, 17]
+
+DEBUG_LOG = Path("/Users/adamsaldanha/Desktop/genai-2026/.cursor/debug-8110b2.log")
 
 SYSTEM_PROMPT = """You are C.H.U.D — Continuous Heads-Up Display — a sharp, deadpan AI financial advisor 
 that lives inside a camera overlay. You analyze items people are looking at and deliver blunt, 
@@ -80,6 +100,11 @@ class InitializeRequest(BaseModel):
 
 @app.get("/")
 async def root():
+    import time
+    # #region agent log
+    _log = json.dumps({"sessionId":"8110b2","location":"main.py:root","message":"root_hit","data":{},"timestamp":int(time.time()*1000),"hypothesisId":"H2"})
+    with open(DEBUG_LOG, "a") as _f: _f.write(_log + "\n")
+    # #endregion
     return {"status": "online", "service": "C.H.U.D Brain v1.0"}
 
 
@@ -89,6 +114,55 @@ async def initialize_budget(req: InitializeRequest):
         "status": "initialized",
         "daily_fun_budget": req.dailyFunBudget,
         "message": f"Budget calibrated. Daily limit: ${req.dailyFunBudget:.2f}",
+    }
+
+
+class GestureRequest(BaseModel):
+    image: str
+
+
+@app.post("/gesture")
+async def detect_gesture(req: GestureRequest):
+    import time
+    # #region agent log
+    _log0 = json.dumps({"sessionId":"8110b2","location":"main.py:gesture_entry","message":"gesture_request_received","data":{"image_len":len(req.image)},"timestamp":int(time.time()*1000),"hypothesisId":"H2"})
+    with open(DEBUG_LOG, "a") as _f: _f.write(_log0 + "\n")
+    # #endregion
+    try:
+        image_bytes = base64.b64decode(req.image)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid base64 image")
+
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    np_image = np.array(image)
+    mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=np_image)
+
+    results = hands_detector.detect(mp_image)
+
+    # #region agent log
+    _log = json.dumps({"sessionId":"8110b2","location":"main.py:gesture","message":"gesture_detect","data":{"hands_found":len(results.hand_landmarks),"img_shape":list(np_image.shape)},"timestamp":int(time.time()*1000),"hypothesisId":"H1"})
+    with open(DEBUG_LOG, "a") as _f: _f.write(_log + "\n")
+    # #endregion
+
+    if not results.hand_landmarks:
+        return {"gesture": "none", "palm_open": False}
+
+    landmarks = results.hand_landmarks[0]
+    fingers_up = sum(
+        1 for tip, mcp in zip(FINGERTIP_IDS, MCP_IDS)
+        if landmarks[tip].y < landmarks[mcp].y
+    )
+
+    palm_open = fingers_up >= 4
+
+    # #region agent log
+    _log2 = json.dumps({"sessionId":"8110b2","location":"main.py:gesture","message":"gesture_result","data":{"fingers_up":fingers_up,"palm_open":palm_open},"timestamp":int(time.time()*1000),"hypothesisId":"H1"})
+    with open(DEBUG_LOG, "a") as _f: _f.write(_log2 + "\n")
+    # #endregion
+
+    return {
+        "gesture": "open_palm" if palm_open else "fist",
+        "palm_open": palm_open,
     }
 
 

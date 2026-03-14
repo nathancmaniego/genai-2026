@@ -1,8 +1,22 @@
+import Constants from 'expo-constants';
 import { BudgetProfile } from './storage';
 
-const BASE_URL = 'http://localhost:8000';
+function getDevServerUrl(): string {
+  const hostUri = Constants.expoConfig?.hostUri;
+  if (hostUri) {
+    const host = hostUri.split(':')[0];
+    return `http://${host}:8000`;
+  }
+  return 'http://localhost:8000';
+}
+
+const BASE_URL = getDevServerUrl();
 
 let apiBaseUrl = BASE_URL;
+
+export function getApiBaseUrl() {
+  return apiBaseUrl;
+}
 
 export function setApiBaseUrl(url: string) {
   apiBaseUrl = url;
@@ -46,6 +60,23 @@ export async function analyzeFrame(
     }),
   });
   if (!res.ok) throw new Error(`Server error: ${res.status}`);
+  return res.json();
+}
+
+export interface GestureResponse {
+  gesture: 'open_palm' | 'fist' | 'none';
+  palm_open: boolean;
+}
+
+export async function detectGesture(
+  base64Image: string
+): Promise<GestureResponse> {
+  const res = await fetch(`${apiBaseUrl}/gesture`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ image: base64Image }),
+  });
+  if (!res.ok) throw new Error(`Gesture error: ${res.status}`);
   return res.json();
 }
 

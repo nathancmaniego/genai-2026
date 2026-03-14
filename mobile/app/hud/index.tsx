@@ -4,7 +4,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Audio } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { useBudget } from '@/context/BudgetContext';
-import { analyzeFrame, AnalyzeResponse, setApiBaseUrl } from '@/services/api';
+import { analyzeFrame, AnalyzeResponse, setApiBaseUrl, detectGesture } from '@/services/api';
 import { getApiUrl } from '@/services/storage';
 import Reticle from '@/components/Reticle';
 import ScanningBar from '@/components/ScanningBar';
@@ -14,6 +14,7 @@ import { Colors, Fonts, Radii, superellipse } from '@/constants/theme';
 
 const PALM_HOLD_DURATION = 1200;
 const PALM_CHECK_INTERVAL = 100;
+const GESTURE_POLL_MS = 300;
 
 export default function HudScreen() {
   const cameraRef = useRef<CameraView>(null);
@@ -28,6 +29,8 @@ export default function HudScreen() {
 
   const palmTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const palmStartRef = useRef<number>(0);
+  const gestureActiveRef = useRef(false);
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     getApiUrl().then((url) => {
@@ -82,6 +85,7 @@ export default function HudScreen() {
     } finally {
       setScanning(false);
       setScanProgress(0);
+      gestureActiveRef.current = false;
     }
   }, [profile]);
 
@@ -89,8 +93,51 @@ export default function HudScreen() {
     if (result && result.canAfford) {
       deductFromBalance(result.estimatedPrice);
     }
+    gestureActiveRef.current = false;
     setResult(null);
   }, [result, deductFromBalance]);
+
+  useEffect(() => {
+    pollingRef.current = setInterval(async () => {
+      if (!cameraRef.current || scanning || result || gestureActiveRef.current) return;
+      try {
+        const photo = await cameraRef.current.takePictureAsync({
+          base64: true,
+          quality: 0.1,
+          skipProcessing: true,
+        });
+        if (!photo?.base64) return;
+
+        // #region agent log
+        fetch('http://127.0.0.1:7372/ingest/f5f8c5bd-217f-4878-839d-5d3ac34bab0e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8110b2'},body:JSON.stringify({sessionId:'8110b2',location:'hud/index.tsx:poll',message:'gesture_poll_fire',data:{hasPhoto:!!photo.base64,photoLen:photo.base64?.length},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+        // #endregion
+
+        const { palm_open } = await detectGesture(photo.base64);
+
+        // #region agent log
+        fetch('http://127.0.0.1:7372/ingest/f5f8c5bd-217f-4878-839d-5d3ac34bab0e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8110b2'},body:JSON.stringify({sessionId:'8110b2',location:'hud/index.tsx:poll',message:'gesture_response',data:{palm_open},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+        // #endregion
+
+        if (palm_open && !gestureActiveRef.current) {
+          gestureActiveRef.current = true;
+          simulatePalmStart();
+        }
+      } catch (e: any) {
+        // #region agent log
+        fetch('http://127.0.0.1:7372/ingest/f5f8c5bd-217f-4878-839d-5d3ac34bab0e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8110b2'},body:JSON.stringify({sessionId:'8110b2',location:'hud/index.tsx:poll',message:'gesture_poll_error',data:{error:e?.message ?? String(e)},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+        // #endregion
+      }
+    }, GESTURE_POLL_MS);
+
+    return () => {
+      if (pollingRef.current) clearInterval(pollingRef.current);
+    };
+  }, [scanning, result, simulatePalmStart]);
+
+  const handlePalmEnd = useCallback(() => {
+    gestureActiveRef.current = false;
+    simulatePalmEnd();
+  }, [simulatePalmEnd]);
 
   if (!permission) {
     return <View style={styles.container} />;
@@ -115,8 +162,8 @@ export default function HudScreen() {
         <View
           style={styles.touchOverlay}
           onTouchStart={simulatePalmStart}
-          onTouchEnd={simulatePalmEnd}
-          onTouchCancel={simulatePalmEnd}
+          onTouchEnd={handlePalmEnd}
+          onTouchCancel={handlePalmEnd}
         />
 
         {/* Profile button — top-left, above touch overlay */}
