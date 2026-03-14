@@ -961,3 +961,440 @@
 {"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529256674, "hypothesisId": "H2"}
 {"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529256699, "hypothesisId": "H1"}
 {"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529257332, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529257363, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529257902, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529257930, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529258553, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529258578, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529259214, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529259238, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529259821, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529259845, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529260454, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529260478, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13716}, "timestamp": 1773529261079, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529261103, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529261702, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529261727, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529262344, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529262370, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529262977, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529263001, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529263586, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529263617, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13716}, "timestamp": 1773529264610, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529264639, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529264879, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529264903, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529265485, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529265509, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529266100, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529266125, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529266769, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529266793, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529267369, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529267393, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529267994, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529268018, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529268714, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529268738, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529269262, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529269286, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529269885, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529269911, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529270497, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529270524, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529271142, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529271635, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529271773, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529271801, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529272389, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529272413, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529272994, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529273018, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529273604, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529273628, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529274287, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529274311, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529274897, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529274921, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529275532, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529275556, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529276101, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529276126, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529276740, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529276765, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529277435, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529277472, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529278008, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529278034, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529278634, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529278659, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529279271, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529279296, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529279884, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529279909, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529280484, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529280509, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529281102, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529281126, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529281786, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529281810, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529282369, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529282395, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529283001, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529283026, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529283603, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529283627, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529284262, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529284287, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529284882, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529284908, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529285525, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529285551, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529286107, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529286131, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529286735, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529286759, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529287372, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529287396, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529288018, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529288042, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13716}, "timestamp": 1773529288647, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529288671, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529289250, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529289275, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529289896, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529289920, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529290556, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529290594, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529291138, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529291163, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529291803, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529291828, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529292366, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529292391, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529293020, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529293045, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529293701, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529293727, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529294244, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529294270, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13716}, "timestamp": 1773529294976, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529295000, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529295494, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529295519, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13708}, "timestamp": 1773529296131, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529296156, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529296847, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529296871, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 13712}, "timestamp": 1773529297379, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529297404, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 14224}, "timestamp": 1773529298097, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529298122, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 26000}, "timestamp": 1773529298993, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529299018, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 29976}, "timestamp": 1773529299669, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529299697, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 21316}, "timestamp": 1773529301049, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529301086, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 24928}, "timestamp": 1773529302095, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529302120, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 27932}, "timestamp": 1773529303375, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529303415, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 34208}, "timestamp": 1773529304537, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529304569, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 20972}, "timestamp": 1773529305923, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529305951, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 30728}, "timestamp": 1773529307053, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529307078, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 34268}, "timestamp": 1773529308391, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529308435, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 27248}, "timestamp": 1773529309001, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529309026, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 26404}, "timestamp": 1773529310280, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529310305, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 30260}, "timestamp": 1773529311571, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529311596, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 28516}, "timestamp": 1773529312085, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529312117, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 18744}, "timestamp": 1773529312725, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529312751, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 31988}, "timestamp": 1773529313358, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529313387, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 24976}, "timestamp": 1773529313988, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529314012, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 18148}, "timestamp": 1773529314629, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529314671, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 27088}, "timestamp": 1773529315305, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529315333, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 25092}, "timestamp": 1773529316449, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529316477, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 22164}, "timestamp": 1773529317125, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529317167, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 19860}, "timestamp": 1773529317935, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529317965, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 28680}, "timestamp": 1773529318453, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529318479, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 23464}, "timestamp": 1773529319393, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529319417, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 22932}, "timestamp": 1773529320929, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529320955, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 20992}, "timestamp": 1773529322132, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529322173, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 17760}, "timestamp": 1773529323173, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529323197, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 15440}, "timestamp": 1773529323700, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529323726, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 17836}, "timestamp": 1773529324303, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529324335, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 16984}, "timestamp": 1773529325278, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529325303, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 14748}, "timestamp": 1773529325826, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529325850, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 14936}, "timestamp": 1773529327034, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529327058, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 15104}, "timestamp": 1773529327424, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529327448, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 15108}, "timestamp": 1773529328086, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529328110, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 14932}, "timestamp": 1773529328665, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529328692, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 14952}, "timestamp": 1773529330256, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [1080, 500, 3]}, "timestamp": 1773529330281, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 47360}, "timestamp": 1773529330837, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529330869, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 49476}, "timestamp": 1773529332125, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529332174, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 51376}, "timestamp": 1773529333216, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529333243, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 55088}, "timestamp": 1773529333661, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529333688, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 53824}, "timestamp": 1773529334231, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529334259, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 56852}, "timestamp": 1773529335254, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529335324, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 51520}, "timestamp": 1773529335820, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529335850, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 60976}, "timestamp": 1773529337378, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529337407, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 69972}, "timestamp": 1773529338581, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529338609, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 51520}, "timestamp": 1773529339789, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529339817, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 50352}, "timestamp": 1773529340822, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529340849, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 50964}, "timestamp": 1773529341400, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529341428, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 63020}, "timestamp": 1773529342071, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529342099, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 72632}, "timestamp": 1773529342663, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529342691, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 100540}, "timestamp": 1773529343312, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529343344, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 71140}, "timestamp": 1773529343893, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529343922, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 53416}, "timestamp": 1773529344537, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529344567, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 49024}, "timestamp": 1773529345619, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529345647, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 57528}, "timestamp": 1773529346118, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529346146, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 56876}, "timestamp": 1773529347021, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529347048, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 52096}, "timestamp": 1773529347669, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529347696, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 50740}, "timestamp": 1773529348959, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529348987, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 50828}, "timestamp": 1773529349996, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529350024, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 55240}, "timestamp": 1773529350472, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529350500, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 65716}, "timestamp": 1773529352280, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529352308, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 51648}, "timestamp": 1773529352382, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529352410, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 53996}, "timestamp": 1773529352811, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529352842, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 49640}, "timestamp": 1773529354008, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529354037, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 56116}, "timestamp": 1773529355135, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529355163, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 84180}, "timestamp": 1773529356596, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529356625, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 68420}, "timestamp": 1773529357536, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529357565, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 57164}, "timestamp": 1773529357950, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529357979, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 52760}, "timestamp": 1773529359291, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529359319, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 58812}, "timestamp": 1773529359797, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529359825, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 53356}, "timestamp": 1773529361738, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773529361766, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 81020}, "timestamp": 1773530966045, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530966114, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 87708}, "timestamp": 1773530966549, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530966579, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 89388}, "timestamp": 1773530967162, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530967191, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 81116}, "timestamp": 1773530967773, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530967801, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 94896}, "timestamp": 1773530968412, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530968442, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 98580}, "timestamp": 1773530969709, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 1, "img_shape": [888, 1920, 3]}, "timestamp": 1773530969774, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_result", "data": {"fingers_up": 5, "palm_open": true}, "timestamp": 1773530969774, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 100188}, "timestamp": 1773530970277, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 1, "img_shape": [888, 1920, 3]}, "timestamp": 1773530970324, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_result", "data": {"fingers_up": 5, "palm_open": true}, "timestamp": 1773530970325, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 69916}, "timestamp": 1773530972999, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530973028, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 66980}, "timestamp": 1773530973432, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530973460, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 84116}, "timestamp": 1773530974031, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530974060, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 83072}, "timestamp": 1773530974671, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530974701, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 96412}, "timestamp": 1773530975269, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530975299, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 90536}, "timestamp": 1773530975874, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530975902, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 88012}, "timestamp": 1773530976499, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530976527, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 91132}, "timestamp": 1773530977100, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530977128, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 81720}, "timestamp": 1773530977749, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530977777, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 58008}, "timestamp": 1773530978428, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530978525, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 65540}, "timestamp": 1773530978953, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530978983, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 60736}, "timestamp": 1773530979562, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530979590, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 65964}, "timestamp": 1773530980246, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530980278, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 53360}, "timestamp": 1773530981375, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773530981403, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 72736}, "timestamp": 1773531071016, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531071098, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 66472}, "timestamp": 1773531071655, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531071685, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 84776}, "timestamp": 1773531072293, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531072321, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 82916}, "timestamp": 1773531072940, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531072968, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 49164}, "timestamp": 1773531074092, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531074120, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 48760}, "timestamp": 1773531074551, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531074579, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 51332}, "timestamp": 1773531075079, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531075107, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 68740}, "timestamp": 1773531075695, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531075724, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 68000}, "timestamp": 1773531076319, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531076346, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 69316}, "timestamp": 1773531076957, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531076985, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 69096}, "timestamp": 1773531077606, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531077634, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 56416}, "timestamp": 1773531078236, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531078263, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 56480}, "timestamp": 1773531078833, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531078866, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 74348}, "timestamp": 1773531079878, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531079913, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 75148}, "timestamp": 1773531080445, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531080474, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 75156}, "timestamp": 1773531081045, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531081076, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 76412}, "timestamp": 1773531081668, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531081697, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 76704}, "timestamp": 1773531082306, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531082336, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 76720}, "timestamp": 1773531082889, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531082918, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 77296}, "timestamp": 1773531083515, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531083555, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 77188}, "timestamp": 1773531084121, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531084150, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 77332}, "timestamp": 1773531084734, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531084788, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 76912}, "timestamp": 1773531085406, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531085436, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 75988}, "timestamp": 1773531085999, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531086046, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 75160}, "timestamp": 1773531086598, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531086628, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 78428}, "timestamp": 1773531087252, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531087298, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 78736}, "timestamp": 1773531087887, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531087920, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 78628}, "timestamp": 1773531088506, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531088551, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 78904}, "timestamp": 1773531089160, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531089191, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79016}, "timestamp": 1773531089767, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531089807, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79016}, "timestamp": 1773531090381, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531090410, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79136}, "timestamp": 1773531090993, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531091042, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79496}, "timestamp": 1773531091631, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531091661, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79608}, "timestamp": 1773531092252, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531092296, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79764}, "timestamp": 1773531092901, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531092929, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79900}, "timestamp": 1773531093507, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531093552, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 77048}, "timestamp": 1773531094110, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531094141, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 78772}, "timestamp": 1773531094761, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531094803, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79720}, "timestamp": 1773531095377, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531095406, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79776}, "timestamp": 1773531096019, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531096059, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79960}, "timestamp": 1773531096644, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531096680, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 80616}, "timestamp": 1773531097246, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531097296, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 78424}, "timestamp": 1773531097901, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531097929, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 79404}, "timestamp": 1773531098504, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531098548, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 80712}, "timestamp": 1773531099158, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531099190, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 51764}, "timestamp": 1773531099760, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531099808, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 62860}, "timestamp": 1773531120792, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531120862, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 64496}, "timestamp": 1773531121697, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531121730, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 65288}, "timestamp": 1773531122717, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531122745, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 66556}, "timestamp": 1773531123944, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531123974, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 98504}, "timestamp": 1773531124875, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531124903, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 102772}, "timestamp": 1773531125725, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531125753, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 84940}, "timestamp": 1773531126768, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531126796, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 91144}, "timestamp": 1773531127747, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531127775, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 68352}, "timestamp": 1773531128781, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531128809, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 106396}, "timestamp": 1773531129783, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531129816, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 106172}, "timestamp": 1773531130809, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531130837, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 104696}, "timestamp": 1773531131832, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531131861, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 76324}, "timestamp": 1773531132809, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531132838, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 54892}, "timestamp": 1773531134115, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531134142, "hypothesisId": "H1"}
+{"sessionId": "8110b2", "location": "main.py:gesture_entry", "message": "gesture_request_received", "data": {"image_len": 47624}, "timestamp": 1773531135275, "hypothesisId": "H2"}
+{"sessionId": "8110b2", "location": "main.py:gesture", "message": "gesture_detect", "data": {"hands_found": 0, "img_shape": [888, 1920, 3]}, "timestamp": 1773531135302, "hypothesisId": "H1"}

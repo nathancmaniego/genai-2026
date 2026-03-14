@@ -1,22 +1,8 @@
-import Constants from 'expo-constants';
 import { BudgetProfile } from './storage';
 
-function getDevServerUrl(): string {
-  const hostUri = Constants.expoConfig?.hostUri;
-  if (hostUri) {
-    const host = hostUri.split(':')[0];
-    return `http://${host}:8000`;
-  }
-  return 'http://localhost:8000';
-}
-
-const BASE_URL = getDevServerUrl();
+const BASE_URL = 'http://localhost:8000';
 
 let apiBaseUrl = BASE_URL;
-
-export function getApiBaseUrl() {
-  return apiBaseUrl;
-}
 
 export function setApiBaseUrl(url: string) {
   apiBaseUrl = url;

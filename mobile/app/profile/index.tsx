@@ -13,7 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 import { useBudget } from '@/context/BudgetContext';
-import { calculateDailyFunBudget, getApiUrl, getUserProfile } from '@/services/storage';
+import { calculateDailyFunBudget, saveApiUrl, getApiUrl, getUserProfile } from '@/services/storage';
 import { setApiBaseUrl } from '@/services/api';
 import type { UserProfile } from '@/types/profile';
 
@@ -26,6 +26,8 @@ export default function ProfileScreen() {
   const [income, setIncome] = useState('');
   const [costs, setCosts] = useState('');
   const [savings, setSavings] = useState('');
+  const [serverUrl, setServerUrl] = useState('');
+  const [serverSaved, setServerSaved] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
@@ -35,7 +37,10 @@ export default function ProfileScreen() {
       setSavings(String(profile.savingsGoal));
     }
     getApiUrl().then((url) => {
-      if (url) setApiBaseUrl(url);
+      if (url) {
+        setServerUrl(url);
+        setApiBaseUrl(url);
+      }
     });
     getUserProfile().then(setUserProfile);
   }, [profile]);
@@ -54,6 +59,16 @@ export default function ProfileScreen() {
       currentBalance: daily,
     });
     setEditing(false);
+  };
+
+  const handleSaveServer = async () => {
+    const url = serverUrl.trim();
+    if (url) {
+      await saveApiUrl(url);
+      setApiBaseUrl(url);
+      setServerSaved(true);
+      setTimeout(() => setServerSaved(false), 2000);
+    }
   };
 
   const handleResetBalance = () => {
@@ -183,7 +198,34 @@ export default function ProfileScreen() {
           )}
         </Animated.View>
 
-        {/* Server Config — hidden; auto-detected from Expo dev server IP */}
+        {/* Server Config */}
+        <Animated.View entering={FadeInDown.duration(400).delay(300)} style={styles.section}>
+          <Text style={styles.sectionTitle}>server</Text>
+          <View style={styles.serverRow}>
+            <TextInput
+              style={styles.serverInput}
+              value={serverUrl}
+              onChangeText={setServerUrl}
+              placeholder="http://localhost:8000"
+              placeholderTextColor={Colors.textMuted}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardAppearance="dark"
+              selectionColor={Colors.accent}
+            />
+            <Pressable
+              style={[styles.serverSaveBtn, serverSaved && styles.serverSavedBtn]}
+              onPress={handleSaveServer}
+            >
+              <Text style={[styles.serverSaveText, serverSaved && styles.serverSavedText]}>
+                {serverSaved ? 'saved' : 'set'}
+              </Text>
+            </Pressable>
+          </View>
+          <Text style={styles.serverHint}>
+            ngrok url for demo day — e.g. https://abc123.ngrok.io
+          </Text>
+        </Animated.View>
 
         {/* Preferences */}
         {userProfile && (
@@ -514,6 +556,49 @@ const styles = StyleSheet.create({
     color: Colors.bg,
     fontWeight: '600',
     letterSpacing: 0.5,
+  },
+
+  // Server
+  serverRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+  },
+  serverInput: {
+    flex: 1,
+    fontFamily: Fonts.mono,
+    fontSize: 13,
+    color: Colors.white,
+    backgroundColor: Colors.bgCard,
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 12,
+    ...superellipse(Radii.md),
+  },
+  serverSaveBtn: {
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    backgroundColor: Colors.bgElevated,
+    ...superellipse(Radii.md),
+  },
+  serverSavedBtn: {
+    backgroundColor: Colors.accentDim,
+  },
+  serverSaveText: {
+    fontFamily: Fonts.mono,
+    fontSize: 12,
+    color: Colors.textSecondary,
+    fontWeight: '600',
+    letterSpacing: 1,
+  },
+  serverSavedText: {
+    color: Colors.accent,
+  },
+  serverHint: {
+    fontFamily: Fonts.mono,
+    fontSize: 10,
+    color: Colors.textMuted,
+    letterSpacing: 0.3,
   },
 
   // Danger Zone

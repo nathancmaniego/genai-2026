@@ -14,7 +14,7 @@ import { Colors, Fonts, Radii, superellipse } from '@/constants/theme';
 
 const PALM_HOLD_DURATION = 1200;
 const PALM_CHECK_INTERVAL = 100;
-const GESTURE_POLL_MS = 300;
+const GESTURE_POLL_MS = 1500;
 
 export default function HudScreen() {
   const cameraRef = useRef<CameraView>(null);
