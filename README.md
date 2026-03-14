@@ -27,14 +27,16 @@ Biometric data is ingested via **Terra API** (HealthKit bridge), sentiment is sc
 
 ## 🏗 Tech Stack
 
-| Layer | Choice | Why |
-|---|---|---|
-| Framework | Next.js 15 (App Router) | Full-stack, fast to build |
-| Database | Prisma + SQLite | Zero config, swap to Postgres post-MVP |
-| Auth | NextAuth.js (JWT) | Session handling, role support |
-| AI | Claude API (claude-sonnet-4-6) | Sentiment scoring + report generation |
-| Booking | Cal.com embed | No backend needed, real booking UX |
-| Health bridge | Terra API | HealthKit → REST, free tier (100 users) |
+
+| Layer         | Choice                         | Why                                     |
+| ------------- | ------------------------------ | --------------------------------------- |
+| Framework     | Next.js 15 (App Router)        | Full-stack, fast to build               |
+| Database      | Prisma + SQLite                | Zero config, swap to Postgres post-MVP  |
+| Auth          | NextAuth.js (JWT)              | Session handling, role support          |
+| AI            | Claude API (claude-sonnet-4-6) | Sentiment scoring + report generation   |
+| Booking       | Cal.com embed                  | No backend needed, real booking UX      |
+| Health bridge | Terra API                      | HealthKit → REST, free tier (100 users) |
+
 
 ---
 
@@ -94,25 +96,31 @@ model Appointment {
 
 ### Journal
 
-| Method | Route | Description |
-|---|---|---|
-| POST | `/api/entries` | Create entry, trigger Claude sentiment score |
-| GET | `/api/entries` | List entries for current user |
+
+| Method | Route          | Description                                  |
+| ------ | -------------- | -------------------------------------------- |
+| POST   | `/api/entries` | Create entry, trigger Claude sentiment score |
+| GET    | `/api/entries` | List entries for current user                |
+
 
 ### Health
 
-| Method | Route | Description |
-|---|---|---|
-| POST | `/api/health-webhook` | Terra webhook — verify secret, upsert HealthRecord |
-| GET | `/api/health` | Get health records for current user |
+
+| Method | Route                 | Description                                        |
+| ------ | --------------------- | -------------------------------------------------- |
+| POST   | `/api/health-webhook` | Terra webhook — verify secret, upsert HealthRecord |
+| GET    | `/api/health`         | Get health records for current user                |
+
 
 ### Reports & Booking
 
-| Method | Route | Description |
-|---|---|---|
-| GET | `/api/report/:userId` | Generate AI therapist report (journal + health combined) |
-| POST | `/api/trigger-booking` | Called when threshold hit — creates Appointment row |
-| GET | `/api/appointments` | List appointments for current user |
+
+| Method | Route                  | Description                                              |
+| ------ | ---------------------- | -------------------------------------------------------- |
+| GET    | `/api/report/:userId`  | Generate AI therapist report (journal + health combined) |
+| POST   | `/api/trigger-booking` | Called when threshold hit — creates Appointment row      |
+| GET    | `/api/appointments`    | List appointments for current user                       |
+
 
 ---
 
@@ -255,21 +263,25 @@ Be clinical and specific. Reference actual dates and values where relevant.
 
 ### Day 1
 
-| Engineer | Tasks |
-|---|---|
-| Eng 1 | NextAuth setup, journal entry UI, `POST /api/entries`, entry history list |
-| Eng 2 | Claude sentiment scoring, threshold detection, `POST /api/trigger-booking` |
-| Eng 3 | Prisma schema + migrate, Cal.com booking modal stub, Terra webhook route |
+
+| Engineer | Tasks                                                                      |
+| -------- | -------------------------------------------------------------------------- |
+| Nathan   | NextAuth setup, journal entry UI, `POST /api/entries`, entry history list  |
+| Ethan    | Claude sentiment scoring, threshold detection, `POST /api/trigger-booking` |
+| Adam     | Prisma schema + migrate, Cal.com booking modal stub, Terra webhook route   |
+
 
 **EOD sync:** Wire journal submit → sentiment score → threshold check end-to-end before signing off.
 
 ### Day 2
 
-| Engineer | Tasks |
-|---|---|
-| Eng 1 | Booking alert banner/modal (shown when appointment pending), polish + error states |
-| Eng 2 | `GET /api/report/:userId` with Claude report generation, demo seed script |
-| Eng 3 | Therapist dashboard (mood chart + AI summary card + alert indicators), full demo run-through |
+
+| Engineer | Tasks                                                                                        |
+| -------- | -------------------------------------------------------------------------------------------- |
+| Nathan   | Booking alert banner/modal (shown when appointment pending), polish + error states           |
+| Ethan    | `GET /api/report/:userId` with Claude report generation, demo seed script                    |
+| Adam     | Therapist dashboard (mood chart + AI summary card + alert indicators), full demo run-through |
+
 
 ---
 
@@ -283,13 +295,15 @@ Be clinical and specific. Reference actual dates and values where relevant.
 
 **Terra daily webhook payload fields used:**
 
-| Field | Maps to |
-|---|---|
-| `heart_rate_data.hrv.rmssd.avg` | HRV in ms (lower = more stressed) |
-| `heart_rate_data.summary.avg_hr_bpm` | Resting heart rate |
-| `sleep.duration_asleep_state_seconds` | Total sleep (convert to hours) |
-| `sleep.sleep_efficiency` | Sleep quality (0–1) |
-| `activity.steps` | Daily steps |
+
+| Field                                 | Maps to                           |
+| ------------------------------------- | --------------------------------- |
+| `heart_rate_data.hrv.rmssd.avg`       | HRV in ms (lower = more stressed) |
+| `heart_rate_data.summary.avg_hr_bpm`  | Resting heart rate                |
+| `sleep.duration_asleep_state_seconds` | Total sleep (convert to hours)    |
+| `sleep.sleep_efficiency`              | Sleep quality (0–1)               |
+| `activity.steps`                      | Daily steps                       |
+
 
 ---
 
@@ -388,3 +402,4 @@ main();
 - Fine-tuned journaling model for more empathetic conversational responses
 - PHIPA/HIPAA compliance review before handling real patient data
 - Real Cal.com API integration for confirmed booking callbacks
+
