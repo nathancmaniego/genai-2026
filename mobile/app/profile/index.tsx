@@ -28,6 +28,8 @@ export default function ProfileScreen() {
   const [savings, setSavings] = useState('');
   const [serverUrl, setServerUrl] = useState('');
   const [serverSaved, setServerSaved] = useState(false);
+  const [voiceId, setVoiceId] = useState('');
+  const [voiceSaved, setVoiceSaved] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function ProfileScreen() {
       setIncome(String(profile.monthlyIncome));
       setCosts(String(profile.fixedCosts));
       setSavings(String(profile.savingsGoal));
+      setVoiceId(profile.voiceId ?? '');
     }
     getApiUrl().then((url) => {
       if (url) {
@@ -46,6 +49,8 @@ export default function ProfileScreen() {
   }, [profile]);
 
   const handleSaveProfile = async () => {
+    if (!profile) return;
+
     const inc = parseFloat(income) || 0;
     const cos = parseFloat(costs) || 0;
     const sav = parseFloat(savings) || 0;
@@ -57,6 +62,7 @@ export default function ProfileScreen() {
       savingsGoal: sav,
       dailyFunBudget: daily,
       currentBalance: daily,
+      voiceId: profile.voiceId ?? '',
     });
     setEditing(false);
   };
@@ -69,6 +75,19 @@ export default function ProfileScreen() {
       setServerSaved(true);
       setTimeout(() => setServerSaved(false), 2000);
     }
+  };
+
+  const handleSaveVoice = async () => {
+    if (!profile) return;
+
+    const trimmedVoiceId = voiceId.trim();
+    await setProfile({
+      ...profile,
+      voiceId: trimmedVoiceId,
+    });
+    setVoiceId(trimmedVoiceId);
+    setVoiceSaved(true);
+    setTimeout(() => setVoiceSaved(false), 2000);
   };
 
   const handleResetBalance = () => {
@@ -227,6 +246,34 @@ export default function ProfileScreen() {
           </Text>
         </Animated.View>
 
+        <Animated.View entering={FadeInDown.duration(400).delay(350)} style={styles.section}>
+          <Text style={styles.sectionTitle}>voice agent</Text>
+          <View style={styles.serverRow}>
+            <TextInput
+              style={styles.serverInput}
+              value={voiceId}
+              onChangeText={setVoiceId}
+              placeholder="leave blank to use backend default"
+              placeholderTextColor={Colors.textMuted}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardAppearance="dark"
+              selectionColor={Colors.accent}
+            />
+            <Pressable
+              style={[styles.serverSaveBtn, voiceSaved && styles.serverSavedBtn]}
+              onPress={handleSaveVoice}
+            >
+              <Text style={[styles.serverSaveText, voiceSaved && styles.serverSavedText]}>
+                {voiceSaved ? 'saved' : 'set'}
+              </Text>
+            </Pressable>
+          </View>
+          <Text style={styles.serverHint}>
+            paste an ElevenLabs voice ID to override the backend default
+          </Text>
+        </Animated.View>
+
         {/* Preferences */}
         {userProfile && (
           <Animated.View entering={FadeInDown.duration(400).delay(400)} style={styles.section}>
@@ -239,6 +286,8 @@ export default function ProfileScreen() {
               <PrefRow label="intervene" value={userProfile.interventionPreference} />
               <View style={styles.rule} />
               <PrefRow label="warning" value={userProfile.preferredWarningType} />
+              <View style={styles.rule} />
+              <PrefRow label="voice id" value={profile.voiceId || 'backend default'} />
               {userProfile.overspendingTriggers.length > 0 && (
                 <>
                   <View style={styles.rule} />

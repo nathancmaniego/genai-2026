@@ -46,5 +46,6 @@ export function buildBudgetProfile(p: UserProfile): BudgetProfile {
     savingsGoal: p.monthlySavingsGoal,
     dailyFunBudget,
     currentBalance: dailyFunBudget,
+    voiceId: '',
   };
 }

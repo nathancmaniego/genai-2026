@@ -6,7 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -68,6 +68,7 @@ class BudgetData(BaseModel):
 class AnalyzeRequest(BaseModel):
     image: str
     budget: BudgetData
+    voiceId: str | None = None
 
 
 class InitializeRequest(BaseModel):
@@ -93,7 +94,7 @@ async def initialize_budget(req: InitializeRequest):
 
 
 @app.post("/analyze")
-async def analyze_frame(req: AnalyzeRequest):
+async def analyze_frame(req: AnalyzeRequest, request: Request):
     if not os.getenv("GEMINI_API_KEY"):
         raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
 
@@ -147,7 +148,9 @@ async def analyze_frame(req: AnalyzeRequest):
 
     audio_url = None
     try:
-        audio_url = await generate_voice(voice_line)
+        audio_url = await generate_voice(voice_line, req.voiceId)
+        if audio_url:
+            audio_url = build_absolute_url(request, audio_url)
     except Exception:
         pass
 
@@ -164,7 +167,7 @@ async def analyze_frame(req: AnalyzeRequest):
     }
 
 
-async def generate_voice(text: str) -> str | None:
+async def generate_voice(text: str, voice_id: str | None = None) -> str | None:
     api_key = os.getenv("ELEVENLABS_API_KEY")
     if not api_key:
         return None
@@ -172,10 +175,12 @@ async def generate_voice(text: str) -> str | None:
     from elevenlabs import ElevenLabs
 
     client = ElevenLabs(api_key=api_key)
-    voice_id = os.getenv("ELEVENLABS_VOICE_ID", "pNInz6obpgDQGcFmaJgB")
+    selected_voice_id = (voice_id or "").strip() or os.getenv(
+        "ELEVENLABS_VOICE_ID", "pNInz6obpgDQGcFmaJgB"
+    )
 
     audio_generator = client.text_to_speech.convert(
-        voice_id=voice_id,
+        voice_id=selected_voice_id,
         text=text,
         model_id="eleven_turbo_v2",
     )
@@ -187,6 +192,12 @@ async def generate_voice(text: str) -> str | None:
             f.write(chunk)
 
     return f"/audio/{filename}"
+
+
+def build_absolute_url(request: Request, path: str) -> str:
+    base_url = str(request.base_url).rstrip("/")
+    normalized_path = path if path.startswith("/") else f"/{path}"
+    return f"{base_url}{normalized_path}"
 
 
 @app.get("/audio/{filename}")

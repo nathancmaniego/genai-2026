@@ -17,6 +17,7 @@ const PALM_CHECK_INTERVAL = 100;
 
 export default function HudScreen() {
   const cameraRef = useRef<CameraView>(null);
+  const soundRef = useRef<Audio.Sound | null>(null);
   const [permission, requestPermission] = useCameraPermissions();
   const { profile, deductFromBalance } = useBudget();
   const router = useRouter();
@@ -33,6 +34,25 @@ export default function HudScreen() {
     getApiUrl().then((url) => {
       if (url) setApiBaseUrl(url);
     });
+  }, []);
+
+  useEffect(() => {
+    Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: false,
+      shouldDuckAndroid: true,
+      playThroughEarpieceAndroid: false,
+    }).catch(() => {});
+
+    return () => {
+      if (palmTimerRef.current) {
+        clearInterval(palmTimerRef.current);
+      }
+      if (soundRef.current) {
+        soundRef.current.unloadAsync().catch(() => {});
+      }
+    };
   }, []);
 
   const simulatePalmStart = useCallback(() => {
@@ -74,7 +94,19 @@ export default function HudScreen() {
       setResult(response);
 
       if (response.audioUrl) {
+        if (soundRef.current) {
+          await soundRef.current.unloadAsync().catch(() => {});
+          soundRef.current = null;
+        }
         const { sound } = await Audio.Sound.createAsync({ uri: response.audioUrl });
+        soundRef.current = sound;
+        sound.setOnPlaybackStatusUpdate((status) => {
+          if (!status.isLoaded || !status.didJustFinish) return;
+          sound.unloadAsync().catch(() => {});
+          if (soundRef.current === sound) {
+            soundRef.current = null;
+          }
+        });
         await sound.playAsync();
       }
     } catch (err: any) {

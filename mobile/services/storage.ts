@@ -14,6 +14,7 @@ export interface BudgetProfile {
   savingsGoal: number;
   dailyFunBudget: number;
   currentBalance: number;
+  voiceId?: string;
 }
 
 export function calculateDailyFunBudget(
