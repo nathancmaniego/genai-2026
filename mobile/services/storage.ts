@@ -1,9 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { UserProfile } from '@/types/profile';
 
 const KEYS = {
   ONBOARDED: 'chud_onboarded',
   BUDGET: 'chud_budget',
   API_URL: 'chud_api_url',
+  USER_PROFILE: 'chud_user_profile',
 };
 
 export interface BudgetProfile {
@@ -39,7 +41,16 @@ export async function isOnboarded(): Promise<boolean> {
 }
 
 export async function resetOnboarding(): Promise<void> {
-  await AsyncStorage.multiRemove([KEYS.ONBOARDED, KEYS.BUDGET]);
+  await AsyncStorage.multiRemove([KEYS.ONBOARDED, KEYS.BUDGET, KEYS.USER_PROFILE]);
+}
+
+export async function saveUserProfile(profile: UserProfile): Promise<void> {
+  await AsyncStorage.setItem(KEYS.USER_PROFILE, JSON.stringify(profile));
+}
+
+export async function getUserProfile(): Promise<UserProfile | null> {
+  const raw = await AsyncStorage.getItem(KEYS.USER_PROFILE);
+  return raw ? JSON.parse(raw) : null;
 }
 
 export async function updateBalance(newBalance: number): Promise<void> {

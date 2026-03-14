@@ -8,46 +8,30 @@ export default function OnboardingWelcome() {
 
   return (
     <View style={styles.container}>
-      <Animated.View entering={FadeInDown.duration(700).delay(200)} style={styles.badge}>
+      <Animated.View entering={FadeInDown.duration(600).delay(200)} style={styles.badge}>
         <Text style={styles.badgeText}>C.H.U.D</Text>
       </Animated.View>
 
-      <Animated.Text entering={FadeInDown.duration(700).delay(400)} style={styles.title}>
-        Continuous{'\n'}Heads-Up{'\n'}Display
+      <Animated.Text entering={FadeInDown.duration(600).delay(400)} style={styles.title}>
+        Meet C.H.U.D
       </Animated.Text>
 
-      <Animated.Text entering={FadeInDown.duration(700).delay(600)} style={styles.subtitle}>
-        Calibrate your spending limits.{'\n'}
-        Point at anything. Know instantly.
+      <Animated.Text entering={FadeInDown.duration(600).delay(550)} style={styles.subtitle}>
+        Your real-time financial guardrail
       </Animated.Text>
 
-      <Animated.View entering={FadeInUp.duration(700).delay(900)} style={styles.features}>
-        <FeatureRow label="01" text="Identify items in frame" />
-        <FeatureRow label="02" text="Estimate price in real-time" />
-        <FeatureRow label="03" text="Verdict against your budget" />
-      </Animated.View>
+      <Animated.Text entering={FadeInDown.duration(600).delay(700)} style={styles.body}>
+        Answer a few quick questions so C.H.U.D can personalize when to warn you, what to say, and how to help you save money.
+      </Animated.Text>
 
-      <Animated.View entering={FadeInUp.duration(500).delay(1200)} style={styles.bottomWrap}>
+      <Animated.View entering={FadeInUp.duration(500).delay(1000)} style={styles.bottomWrap}>
         <Pressable
           style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
-          onPress={() => router.push('/onboarding/income')}
+          onPress={() => router.push('/onboarding/money')}
         >
-          <Text style={styles.buttonText}>begin calibration</Text>
+          <Text style={styles.buttonText}>get started</Text>
         </Pressable>
-
-        <Text style={styles.disclaimer}>
-          all data stored locally on device
-        </Text>
       </Animated.View>
-    </View>
-  );
-}
-
-function FeatureRow({ label, text }: { label: string; text: string }) {
-  return (
-    <View style={styles.featureRow}>
-      <Text style={styles.featureLabel}>{label}</Text>
-      <Text style={styles.featureText}>{text}</Text>
     </View>
   );
 }
@@ -57,7 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.bg,
     paddingHorizontal: Spacing.lg,
-    paddingTop: 100,
+    paddingTop: 120,
   },
   badge: {
     alignSelf: 'flex-start',
@@ -79,52 +63,32 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: '800',
     color: Colors.white,
-    lineHeight: 42,
     letterSpacing: -0.5,
   },
   subtitle: {
     fontFamily: Fonts.mono,
-    fontSize: 14,
+    fontSize: 15,
+    color: Colors.accent,
+    marginTop: Spacing.sm,
+    letterSpacing: 0.5,
+  },
+  body: {
+    fontFamily: Fonts.mono,
+    fontSize: 13,
     color: Colors.textSecondary,
     marginTop: Spacing.lg,
-    lineHeight: 22,
-  },
-  features: {
-    marginTop: Spacing.xxl,
-    gap: Spacing.md,
-  },
-  featureRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: Colors.border,
-  },
-  featureLabel: {
-    fontFamily: Fonts.mono,
-    fontSize: 12,
-    color: Colors.accent,
-    fontWeight: '700',
-    width: 28,
-  },
-  featureText: {
-    fontFamily: Fonts.mono,
-    fontSize: 14,
-    color: Colors.textPrimary,
+    lineHeight: 21,
   },
   bottomWrap: {
     flex: 1,
     justifyContent: 'flex-end',
     paddingBottom: 60,
-    alignItems: 'center',
   },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.white,
     paddingVertical: 18,
-    width: '100%',
     ...superellipse(Radii.lg),
   },
   buttonPressed: {
@@ -137,13 +101,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.bg,
     letterSpacing: 1,
-  },
-  disclaimer: {
-    fontFamily: Fonts.mono,
-    fontSize: 11,
-    color: Colors.textMuted,
-    textAlign: 'center',
-    marginTop: Spacing.md,
-    letterSpacing: 0.5,
   },
 });

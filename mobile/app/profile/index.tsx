@@ -13,8 +13,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 import { useBudget } from '@/context/BudgetContext';
-import { calculateDailyFunBudget, saveApiUrl, getApiUrl } from '@/services/storage';
+import { calculateDailyFunBudget, saveApiUrl, getApiUrl, getUserProfile } from '@/services/storage';
 import { setApiBaseUrl } from '@/services/api';
+import type { UserProfile } from '@/types/profile';
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function ProfileScreen() {
   const [savings, setSavings] = useState('');
   const [serverUrl, setServerUrl] = useState('');
   const [serverSaved, setServerSaved] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     if (profile) {
@@ -40,6 +42,7 @@ export default function ProfileScreen() {
         setApiBaseUrl(url);
       }
     });
+    getUserProfile().then(setUserProfile);
   }, [profile]);
 
   const handleSaveProfile = async () => {
@@ -224,8 +227,30 @@ export default function ProfileScreen() {
           </Text>
         </Animated.View>
 
+        {/* Preferences */}
+        {userProfile && (
+          <Animated.View entering={FadeInDown.duration(400).delay(400)} style={styles.section}>
+            <Text style={styles.sectionTitle}>preferences</Text>
+            <View style={styles.ledger}>
+              <PrefRow label="saving for" value={userProfile.primarySavingsGoal} />
+              <View style={styles.rule} />
+              <PrefRow label="tone" value={userProfile.chudTone} />
+              <View style={styles.rule} />
+              <PrefRow label="intervene" value={userProfile.interventionPreference} />
+              <View style={styles.rule} />
+              <PrefRow label="warning" value={userProfile.preferredWarningType} />
+              {userProfile.overspendingTriggers.length > 0 && (
+                <>
+                  <View style={styles.rule} />
+                  <PrefRow label="triggers" value={userProfile.overspendingTriggers.join(', ')} />
+                </>
+              )}
+            </View>
+          </Animated.View>
+        )}
+
         {/* Danger Zone */}
-        <Animated.View entering={FadeInDown.duration(400).delay(400)} style={styles.section}>
+        <Animated.View entering={FadeInDown.duration(400).delay(500)} style={styles.section}>
           <Pressable style={styles.dangerBtn} onPress={handleRecalibrate}>
             <Text style={styles.dangerText}>recalibrate profile</Text>
           </Pressable>
@@ -254,6 +279,17 @@ function LedgerRow({
       <Text style={[styles.rowLabel, accent && styles.rowAccentLabel]}>{label}</Text>
       <Text style={[styles.rowValue, accent && styles.rowAccentValue]}>
         {sign} ${Math.abs(value).toLocaleString()}
+      </Text>
+    </View>
+  );
+}
+
+function PrefRow({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.row}>
+      <Text style={styles.rowLabel}>{label}</Text>
+      <Text style={[styles.rowValue, { maxWidth: '60%', textAlign: 'right' }]} numberOfLines={2}>
+        {value || '—'}
       </Text>
     </View>
   );
