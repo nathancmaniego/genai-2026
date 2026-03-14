@@ -10,12 +10,12 @@ export default function IncomeScreen() {
     <OnboardingStep
       step={0}
       totalSteps={3}
-      icon="wallet-outline"
-      title="Monthly Income"
-      description="What is your monthly take-home pay? After taxes, before expenses."
+      label="income"
+      title="Monthly take-home"
+      description="After taxes, before any expenses. The number that hits your account."
       value={value}
       onChangeText={setValue}
-      placeholder="4,500"
+      placeholder="4500"
       canAdvance={!!value && parseFloat(value) > 0}
       onBack={() => router.back()}
       onNext={() =>

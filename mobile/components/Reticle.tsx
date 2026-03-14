@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Svg, { Circle, Line, G } from 'react-native-svg';
+import Svg, { Rect, Line, Circle } from 'react-native-svg';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -10,168 +10,78 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Colors } from '@/constants/theme';
 
-const SIZE = 200;
+const SIZE = 220;
 const CENTER = SIZE / 2;
-const RADIUS = 70;
-const BRACKET_LEN = 25;
+const BRACKET = 40;
+const INSET = 20;
+const CORNER_R = 6;
 
 interface Props {
   scanning: boolean;
 }
 
 export default function Reticle({ scanning }: Props) {
-  const pulse = useSharedValue(1);
-  const opacity = useSharedValue(0.6);
+  const opacity = useSharedValue(0.5);
 
   useEffect(() => {
-    pulse.value = withRepeat(
-      withTiming(scanning ? 1.15 : 1.05, {
-        duration: scanning ? 600 : 1800,
-        easing: Easing.inOut(Easing.ease),
-      }),
-      -1,
-      true
-    );
     opacity.value = withRepeat(
-      withTiming(scanning ? 1 : 0.6, {
-        duration: scanning ? 600 : 1800,
+      withTiming(scanning ? 1 : 0.65, {
+        duration: scanning ? 500 : 2000,
         easing: Easing.inOut(Easing.ease),
       }),
       -1,
       true
     );
-  }, [scanning, pulse, opacity]);
+  }, [scanning, opacity]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: pulse.value }],
     opacity: opacity.value,
   }));
 
-  const color = scanning ? Colors.green : Colors.accent;
+  const c = scanning ? Colors.accent : Colors.white;
+  const w = scanning ? 2 : 1.5;
 
   return (
     <View style={styles.container} pointerEvents="none">
       <Animated.View style={[styles.svgWrap, animatedStyle]}>
         <Svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`}>
-          {/* Outer pulsing circle */}
-          <Circle
-            cx={CENTER}
-            cy={CENTER}
-            r={RADIUS}
-            stroke={color}
-            strokeWidth={1.5}
+          {/* Superellipse-style rounded rect outline */}
+          <Rect
+            x={INSET}
+            y={INSET}
+            width={SIZE - INSET * 2}
+            height={SIZE - INSET * 2}
+            rx={CORNER_R * 3}
+            ry={CORNER_R * 3}
+            stroke={c}
+            strokeWidth={0.5}
             fill="none"
-            opacity={0.4}
+            opacity={0.2}
           />
 
-          {/* Inner circle */}
-          <Circle
-            cx={CENTER}
-            cy={CENTER}
-            r={RADIUS * 0.4}
-            stroke={color}
-            strokeWidth={1}
-            fill="none"
-            opacity={0.6}
-          />
+          {/* Center crosshair - minimal */}
+          <Circle cx={CENTER} cy={CENTER} r={2} fill={c} opacity={0.8} />
+          <Line x1={CENTER - 8} y1={CENTER} x2={CENTER - 3} y2={CENTER} stroke={c} strokeWidth={w} opacity={0.6} />
+          <Line x1={CENTER + 3} y1={CENTER} x2={CENTER + 8} y2={CENTER} stroke={c} strokeWidth={w} opacity={0.6} />
+          <Line x1={CENTER} y1={CENTER - 8} x2={CENTER} y2={CENTER - 3} stroke={c} strokeWidth={w} opacity={0.6} />
+          <Line x1={CENTER} y1={CENTER + 3} x2={CENTER} y2={CENTER + 8} stroke={c} strokeWidth={w} opacity={0.6} />
 
-          {/* Center dot */}
-          <Circle cx={CENTER} cy={CENTER} r={3} fill={color} />
-
-          {/* Crosshairs */}
-          <G opacity={0.5}>
-            <Line
-              x1={CENTER}
-              y1={CENTER - RADIUS + 15}
-              x2={CENTER}
-              y2={CENTER - RADIUS + 30}
-              stroke={color}
-              strokeWidth={1}
-            />
-            <Line
-              x1={CENTER}
-              y1={CENTER + RADIUS - 30}
-              x2={CENTER}
-              y2={CENTER + RADIUS - 15}
-              stroke={color}
-              strokeWidth={1}
-            />
-            <Line
-              x1={CENTER - RADIUS + 15}
-              y1={CENTER}
-              x2={CENTER - RADIUS + 30}
-              y2={CENTER}
-              stroke={color}
-              strokeWidth={1}
-            />
-            <Line
-              x1={CENTER + RADIUS - 30}
-              y1={CENTER}
-              x2={CENTER + RADIUS - 15}
-              y2={CENTER}
-              stroke={color}
-              strokeWidth={1}
-            />
-          </G>
-
-          {/* Corner brackets */}
+          {/* Corner brackets — clean L shapes */}
           {/* Top-left */}
-          <Line x1={10} y1={10} x2={10 + BRACKET_LEN} y2={10} stroke={color} strokeWidth={2.5} />
-          <Line x1={10} y1={10} x2={10} y2={10 + BRACKET_LEN} stroke={color} strokeWidth={2.5} />
+          <Line x1={INSET} y1={INSET} x2={INSET + BRACKET} y2={INSET} stroke={c} strokeWidth={w} />
+          <Line x1={INSET} y1={INSET} x2={INSET} y2={INSET + BRACKET} stroke={c} strokeWidth={w} />
 
           {/* Top-right */}
-          <Line
-            x1={SIZE - 10}
-            y1={10}
-            x2={SIZE - 10 - BRACKET_LEN}
-            y2={10}
-            stroke={color}
-            strokeWidth={2.5}
-          />
-          <Line
-            x1={SIZE - 10}
-            y1={10}
-            x2={SIZE - 10}
-            y2={10 + BRACKET_LEN}
-            stroke={color}
-            strokeWidth={2.5}
-          />
+          <Line x1={SIZE - INSET} y1={INSET} x2={SIZE - INSET - BRACKET} y2={INSET} stroke={c} strokeWidth={w} />
+          <Line x1={SIZE - INSET} y1={INSET} x2={SIZE - INSET} y2={INSET + BRACKET} stroke={c} strokeWidth={w} />
 
           {/* Bottom-left */}
-          <Line
-            x1={10}
-            y1={SIZE - 10}
-            x2={10 + BRACKET_LEN}
-            y2={SIZE - 10}
-            stroke={color}
-            strokeWidth={2.5}
-          />
-          <Line
-            x1={10}
-            y1={SIZE - 10}
-            x2={10}
-            y2={SIZE - 10 - BRACKET_LEN}
-            stroke={color}
-            strokeWidth={2.5}
-          />
+          <Line x1={INSET} y1={SIZE - INSET} x2={INSET + BRACKET} y2={SIZE - INSET} stroke={c} strokeWidth={w} />
+          <Line x1={INSET} y1={SIZE - INSET} x2={INSET} y2={SIZE - INSET - BRACKET} stroke={c} strokeWidth={w} />
 
           {/* Bottom-right */}
-          <Line
-            x1={SIZE - 10}
-            y1={SIZE - 10}
-            x2={SIZE - 10 - BRACKET_LEN}
-            y2={SIZE - 10}
-            stroke={color}
-            strokeWidth={2.5}
-          />
-          <Line
-            x1={SIZE - 10}
-            y1={SIZE - 10}
-            x2={SIZE - 10}
-            y2={SIZE - 10 - BRACKET_LEN}
-            stroke={color}
-            strokeWidth={2.5}
-          />
+          <Line x1={SIZE - INSET} y1={SIZE - INSET} x2={SIZE - INSET - BRACKET} y2={SIZE - INSET} stroke={c} strokeWidth={w} />
+          <Line x1={SIZE - INSET} y1={SIZE - INSET} x2={SIZE - INSET} y2={SIZE - INSET - BRACKET} stroke={c} strokeWidth={w} />
         </Svg>
       </Animated.View>
     </View>

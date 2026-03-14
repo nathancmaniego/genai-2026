@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { View, StyleSheet, Text, Alert } from 'react-native';
+import { View, StyleSheet, Text, Alert, Pressable } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import * as ScreenOrientation from 'expo-screen-orientation';
 import { Audio } from 'expo-av';
+import { useRouter } from 'expo-router';
 import { useBudget } from '@/context/BudgetContext';
-import { analyzeFrame, AnalyzeResponse } from '@/services/api';
+import { analyzeFrame, AnalyzeResponse, setApiBaseUrl } from '@/services/api';
+import { getApiUrl } from '@/services/storage';
 import Reticle from '@/components/Reticle';
 import ScanningBar from '@/components/ScanningBar';
 import BudgetTicker from '@/components/BudgetTicker';
 import DecisionOverlay from '@/components/DecisionOverlay';
-import { Colors } from '@/constants/theme';
+import { Colors, Fonts, Radii, superellipse } from '@/constants/theme';
 
 const PALM_HOLD_DURATION = 1200;
 const PALM_CHECK_INTERVAL = 100;
@@ -18,6 +19,7 @@ export default function HudScreen() {
   const cameraRef = useRef<CameraView>(null);
   const [permission, requestPermission] = useCameraPermissions();
   const { profile, deductFromBalance } = useBudget();
+  const router = useRouter();
 
   const [palmDetected, setPalmDetected] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
@@ -27,16 +29,12 @@ export default function HudScreen() {
   const palmTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const palmStartRef = useRef<number>(0);
 
-  // Lock to landscape on mount
   useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
-    return () => {
-      ScreenOrientation.unlockAsync();
-    };
+    getApiUrl().then((url) => {
+      if (url) setApiBaseUrl(url);
+    });
   }, []);
 
-  // Simulated palm detection — in production this would be MediaPipe
-  // For demo: tap anywhere on camera to simulate palm detection
   const simulatePalmStart = useCallback(() => {
     if (scanning || result) return;
     setPalmDetected(true);
@@ -80,7 +78,7 @@ export default function HudScreen() {
         await sound.playAsync();
       }
     } catch (err: any) {
-      Alert.alert('Scan Failed', err.message || 'Could not analyze the frame.');
+      Alert.alert('scan failed', err.message || 'Could not analyze the frame.');
     } finally {
       setScanning(false);
       setScanProgress(0);
@@ -88,9 +86,7 @@ export default function HudScreen() {
   }, [profile]);
 
   const handleDismiss = useCallback(() => {
-    if (result && !result.canAfford) {
-      // Don't deduct if they can't afford it
-    } else if (result) {
+    if (result && result.canAfford) {
       deductFromBalance(result.estimatedPrice);
     }
     setResult(null);
@@ -103,9 +99,11 @@ export default function HudScreen() {
   if (!permission.granted) {
     return (
       <View style={styles.permissionContainer}>
-        <Text style={styles.permissionText}>JARVIS requires camera access for the HUD</Text>
+        <Text style={styles.permissionText}>
+          c.h.u.d requires camera access
+        </Text>
         <Text style={styles.permissionBtn} onPress={requestPermission}>
-          Grant Access
+          grant access
         </Text>
       </View>
     );
@@ -113,12 +111,7 @@ export default function HudScreen() {
 
   return (
     <View style={styles.container}>
-      <CameraView
-        ref={cameraRef}
-        style={styles.camera}
-        facing="back"
-      >
-        {/* Touch overlay for simulating palm detection */}
+      <CameraView ref={cameraRef} style={styles.camera} facing="back">
         <View
           style={styles.touchOverlay}
           onTouchStart={simulatePalmStart}
@@ -126,15 +119,21 @@ export default function HudScreen() {
           onTouchCancel={simulatePalmEnd}
         />
 
-        {/* HUD Elements */}
+        {/* Profile button — top-left, above touch overlay */}
+        <Pressable
+          style={({ pressed }) => [styles.menuBtn, pressed && styles.menuBtnPressed]}
+          onPress={() => router.push('/profile')}
+        >
+          <Text style={styles.menuText}>c.h.u.d</Text>
+        </Pressable>
+
         <Reticle scanning={palmDetected || scanning} />
         <ScanningBar progress={scanProgress} visible={palmDetected} />
 
-        {/* Status indicator */}
         {scanning && (
           <View style={styles.statusWrap}>
             <View style={styles.statusDot} />
-            <Text style={styles.statusText}>ANALYZING...</Text>
+            <Text style={styles.statusText}>analyzing</Text>
           </View>
         )}
 
@@ -145,7 +144,6 @@ export default function HudScreen() {
           />
         )}
 
-        {/* Decision Overlay */}
         {result && <DecisionOverlay result={result} onDismiss={handleDismiss} />}
       </CameraView>
     </View>
@@ -164,6 +162,29 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     zIndex: 10,
   },
+  menuBtn: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    zIndex: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    ...superellipse(Radii.sm),
+  },
+  menuBtnPressed: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  menuText: {
+    fontFamily: Fonts.mono,
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.white,
+    letterSpacing: 2,
+    opacity: 0.7,
+  },
   permissionContainer: {
     flex: 1,
     backgroundColor: Colors.bg,
@@ -172,39 +193,44 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   permissionText: {
-    fontSize: 16,
+    fontFamily: Fonts.mono,
+    fontSize: 14,
     color: Colors.textSecondary,
     textAlign: 'center',
     paddingHorizontal: 40,
+    letterSpacing: 0.5,
   },
   permissionBtn: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: Colors.accent,
+    fontFamily: Fonts.mono,
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.white,
     padding: 12,
+    letterSpacing: 1,
   },
   statusWrap: {
     position: 'absolute',
-    top: 60,
+    top: 52,
     alignSelf: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 100,
   },
   statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.green,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: Colors.accent,
   },
   statusText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: Colors.green,
-    letterSpacing: 1.5,
+    fontFamily: Fonts.mono,
+    fontSize: 10,
+    fontWeight: '600',
+    color: Colors.accent,
+    letterSpacing: 2,
   },
 });

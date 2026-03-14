@@ -5,16 +5,16 @@ import {
   StyleSheet,
   Pressable,
   KeyboardAvoidingView,
+  ScrollView,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { Colors, Spacing } from '@/constants/theme';
+import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 interface Props {
   step: number;
   totalSteps: number;
-  icon: string;
+  label: string;
   title: string;
   description: string;
   value: string;
@@ -28,7 +28,7 @@ interface Props {
 export default function OnboardingStep({
   step,
   totalSteps,
-  icon,
+  label,
   title,
   description,
   value,
@@ -42,85 +42,84 @@ export default function OnboardingStep({
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
     >
-      {/* Progress */}
-      <Animated.View entering={FadeInDown.duration(400)} style={styles.progressRow}>
-        {onBack && (
+      {/* Header — stays fixed */}
+      <Animated.View entering={FadeInDown.duration(400)} style={styles.header}>
+        {onBack ? (
           <Pressable onPress={onBack} style={styles.backBtn}>
-            <Ionicons name="chevron-back" size={24} color={Colors.textSecondary} />
+            <Text style={styles.backText}>{'\u2190'}</Text>
           </Pressable>
+        ) : (
+          <View style={{ width: 40 }} />
         )}
-        <View style={styles.progressDots}>
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <View
-              key={i}
-              style={[
-                styles.dot,
-                i < step ? styles.dotDone : i === step ? styles.dotActive : styles.dotInactive,
-              ]}
-            />
-          ))}
-        </View>
         <Text style={styles.stepLabel}>
-          {step + 1}/{totalSteps}
+          {String(step + 1).padStart(2, '0')}/{String(totalSteps).padStart(2, '0')}
         </Text>
+        <View style={{ width: 40 }} />
       </Animated.View>
 
-      {/* Content */}
-      <View style={styles.content}>
-        <Animated.View entering={FadeInDown.duration(600).delay(200)} style={styles.iconWrap}>
-          <View style={styles.iconCircle}>
-            <Ionicons name={icon as any} size={32} color={Colors.accent} />
-          </View>
-        </Animated.View>
-
-        <Animated.Text entering={FadeInDown.duration(600).delay(300)} style={styles.title}>
-          {title}
-        </Animated.Text>
-
-        <Animated.Text entering={FadeInDown.duration(600).delay(400)} style={styles.description}>
-          {description}
-        </Animated.Text>
-
-        <Animated.View entering={FadeInUp.duration(600).delay(500)} style={styles.inputWrap}>
-          <Text style={styles.dollarSign}>$</Text>
-          <TextInput
-            style={styles.input}
-            value={value}
-            onChangeText={(text) => {
-              const cleaned = text.replace(/[^0-9.]/g, '');
-              onChangeText(cleaned);
-            }}
-            keyboardType="decimal-pad"
-            placeholder={placeholder}
-            placeholderTextColor={Colors.textMuted}
-            autoFocus
-            selectionColor={Colors.accent}
-          />
-          <Text style={styles.perMonth}>/month</Text>
-        </Animated.View>
-      </View>
-
-      {/* Next Button */}
-      <Animated.View entering={FadeInUp.duration(500).delay(700)} style={styles.bottomWrap}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.button,
-            !canAdvance && styles.buttonDisabled,
-            pressed && canAdvance && styles.buttonPressed,
-          ]}
-          onPress={canAdvance ? onNext : undefined}
-        >
-          <Text style={[styles.buttonText, !canAdvance && styles.buttonTextDisabled]}>
-            Continue
-          </Text>
-          <Ionicons
-            name="arrow-forward"
-            size={20}
-            color={canAdvance ? Colors.bg : Colors.textMuted}
-          />
-        </Pressable>
+      <Animated.View entering={FadeInDown.duration(400)} style={styles.progressTrack}>
+        <View style={[styles.progressFill, { width: `${((step + 1) / totalSteps) * 100}%` }]} />
       </Animated.View>
+
+      {/* Scrollable content — shrinks when keyboard appears */}
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
+        <View style={styles.content}>
+          <Animated.Text entering={FadeInDown.duration(500).delay(150)} style={styles.label}>
+            {label}
+          </Animated.Text>
+
+          <Animated.Text entering={FadeInDown.duration(500).delay(250)} style={styles.title}>
+            {title}
+          </Animated.Text>
+
+          <Animated.Text entering={FadeInDown.duration(500).delay(350)} style={styles.description}>
+            {description}
+          </Animated.Text>
+
+          <Animated.View entering={FadeInUp.duration(500).delay(450)} style={styles.inputWrap}>
+            <Text style={styles.dollarSign}>$</Text>
+            <TextInput
+              style={styles.input}
+              value={value}
+              onChangeText={(text) => {
+                const cleaned = text.replace(/[^0-9.]/g, '');
+                onChangeText(cleaned);
+              }}
+              keyboardType="decimal-pad"
+              placeholder={placeholder}
+              placeholderTextColor={Colors.textMuted}
+              autoFocus
+              selectionColor={Colors.accent}
+              keyboardAppearance="dark"
+            />
+            <Text style={styles.perMonth}>/mo</Text>
+          </Animated.View>
+        </View>
+
+        {/* Button inside scroll so it's always reachable */}
+        <Animated.View entering={FadeInUp.duration(400).delay(600)} style={styles.bottomWrap}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.button,
+              !canAdvance && styles.buttonDisabled,
+              pressed && canAdvance && styles.buttonPressed,
+            ]}
+            onPress={canAdvance ? onNext : undefined}
+          >
+            <Text style={[styles.buttonText, !canAdvance && styles.buttonTextDisabled]}>
+              continue
+            </Text>
+          </Pressable>
+        </Animated.View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -131,126 +130,129 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bg,
     paddingHorizontal: Spacing.lg,
   },
-  progressRow: {
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 60,
-    gap: Spacing.sm,
+    justifyContent: 'space-between',
+    paddingTop: 64,
   },
   backBtn: {
-    padding: Spacing.xs,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.bgElevated,
+    ...superellipse(Radii.sm),
   },
-  progressDots: {
-    flex: 1,
-    flexDirection: 'row',
-    gap: 6,
-  },
-  dot: {
-    flex: 1,
-    height: 4,
-    borderRadius: 2,
-  },
-  dotDone: {
-    backgroundColor: Colors.accent,
-  },
-  dotActive: {
-    backgroundColor: Colors.accent,
-    opacity: 0.7,
-  },
-  dotInactive: {
-    backgroundColor: Colors.borderLight,
+  backText: {
+    fontFamily: Fonts.mono,
+    fontSize: 18,
+    color: Colors.textSecondary,
   },
   stepLabel: {
+    fontFamily: Fonts.mono,
     fontSize: 13,
     color: Colors.textMuted,
-    fontWeight: '600',
+    letterSpacing: 2,
+  },
+  progressTrack: {
+    height: 2,
+    backgroundColor: Colors.border,
+    marginTop: Spacing.md,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: Colors.white,
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingBottom: 20,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 60,
+    paddingVertical: Spacing.xl,
   },
-  iconWrap: {
-    marginBottom: Spacing.lg,
-  },
-  iconCircle: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: Colors.accentDim,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 212, 255, 0.3)',
-    alignItems: 'center',
-    justifyContent: 'center',
+  label: {
+    fontFamily: Fonts.mono,
+    fontSize: 11,
+    color: Colors.accent,
+    letterSpacing: 3,
+    textTransform: 'uppercase',
+    marginBottom: Spacing.sm,
   },
   title: {
-    fontSize: 26,
-    fontWeight: '800',
+    fontFamily: Fonts.mono,
+    fontSize: 28,
+    fontWeight: '700',
     color: Colors.white,
-    textAlign: 'center',
     letterSpacing: -0.3,
   },
   description: {
-    fontSize: 15,
+    fontFamily: Fonts.mono,
+    fontSize: 13,
     color: Colors.textSecondary,
-    textAlign: 'center',
     marginTop: Spacing.sm,
-    lineHeight: 22,
-    paddingHorizontal: Spacing.md,
+    lineHeight: 20,
   },
   inputWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: Spacing.xl,
     backgroundColor: Colors.bgCard,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    borderColor: Colors.border,
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     gap: Spacing.xs,
+    ...superellipse(Radii.lg),
   },
   dollarSign: {
+    fontFamily: Fonts.mono,
     fontSize: 32,
     fontWeight: '700',
-    color: Colors.accent,
+    color: Colors.white,
   },
   input: {
     flex: 1,
+    fontFamily: Fonts.mono,
     fontSize: 32,
     fontWeight: '700',
     color: Colors.white,
     paddingVertical: Spacing.sm,
   },
   perMonth: {
-    fontSize: 14,
+    fontFamily: Fonts.mono,
+    fontSize: 13,
     color: Colors.textMuted,
-    fontWeight: '500',
   },
   bottomWrap: {
-    paddingBottom: 50,
+    paddingBottom: Spacing.md,
   },
   button: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.white,
     paddingVertical: 18,
-    borderRadius: 16,
+    ...superellipse(Radii.lg),
   },
   buttonDisabled: {
-    backgroundColor: Colors.bgCardLight,
+    backgroundColor: Colors.bgElevated,
   },
   buttonPressed: {
-    opacity: 0.85,
-    transform: [{ scale: 0.98 }],
+    opacity: 0.8,
+    transform: [{ scale: 0.985 }],
   },
   buttonText: {
-    fontSize: 17,
-    fontWeight: '700',
+    fontFamily: Fonts.mono,
+    fontSize: 15,
+    fontWeight: '600',
     color: Colors.bg,
+    letterSpacing: 1,
   },
   buttonTextDisabled: {
     color: Colors.textMuted,

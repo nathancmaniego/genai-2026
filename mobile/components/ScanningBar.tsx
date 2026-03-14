@@ -6,10 +6,9 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { Colors, Spacing } from '@/constants/theme';
+import { Colors, Fonts, Spacing } from '@/constants/theme';
 
 interface Props {
-  /** 0–1 progress of palm hold detection */
   progress: number;
   visible: boolean;
 }
@@ -43,7 +42,7 @@ export default function ScanningBar({ progress, visible }: Props) {
     <Animated.View style={[styles.container, containerStyle]} pointerEvents="none">
       <View style={styles.labelRow}>
         <Text style={styles.label}>
-          {isComplete ? '✓ SCANNING...' : 'HOLD PALM TO SCAN'}
+          {isComplete ? 'scanning' : 'hold to scan'}
         </Text>
         <Text style={styles.percent}>{Math.round(progress * 100)}%</Text>
       </View>
@@ -52,7 +51,7 @@ export default function ScanningBar({ progress, visible }: Props) {
           style={[
             styles.fill,
             barStyle,
-            { backgroundColor: isComplete ? Colors.green : Colors.accent },
+            { backgroundColor: isComplete ? Colors.accent : Colors.white },
           ]}
         />
       </View>
@@ -63,7 +62,7 @@ export default function ScanningBar({ progress, visible }: Props) {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 50,
+    top: 44,
     left: Spacing.xl,
     right: Spacing.xl,
   },
@@ -73,25 +72,25 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   label: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: Colors.accent,
-    letterSpacing: 1.5,
-    textTransform: 'uppercase',
+    fontFamily: Fonts.mono,
+    fontSize: 10,
+    fontWeight: '600',
+    color: Colors.white,
+    letterSpacing: 2,
+    opacity: 0.7,
   },
   percent: {
-    fontSize: 11,
-    fontWeight: '700',
+    fontFamily: Fonts.mono,
+    fontSize: 10,
+    fontWeight: '600',
     color: Colors.textSecondary,
   },
   track: {
-    height: 4,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 2,
+    height: 2,
+    backgroundColor: 'rgba(255,255,255,0.12)',
     overflow: 'hidden',
   },
   fill: {
     height: '100%',
-    borderRadius: 2,
   },
 });

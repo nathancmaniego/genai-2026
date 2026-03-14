@@ -1,11 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Animated, {
-  FadeIn,
-  FadeOut,
-  SlideInDown,
-} from 'react-native-reanimated';
-import { Colors, Spacing } from '@/constants/theme';
+import Animated, { FadeIn, FadeOut, SlideInDown } from 'react-native-reanimated';
+import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 import type { AnalyzeResponse } from '@/services/api';
 
 interface Props {
@@ -15,49 +10,45 @@ interface Props {
 
 export default function DecisionOverlay({ result, onDismiss }: Props) {
   const isAffordable = result.canAfford;
-  const color = result.severity === 'green'
-    ? Colors.green
-    : result.severity === 'yellow'
-    ? Colors.yellow
-    : Colors.red;
-  const bgColor = result.severity === 'green'
-    ? Colors.greenDim
-    : result.severity === 'yellow'
-    ? 'rgba(255, 214, 0, 0.12)'
-    : Colors.redDim;
-  const icon = isAffordable ? 'checkmark-circle' : 'warning';
-  const verdict = isAffordable ? 'AFFORDABLE' : 'OVER BUDGET';
+  const accentColor = isAffordable ? Colors.accent : Colors.red;
 
   return (
-    <Animated.View entering={FadeIn.duration(300)} exiting={FadeOut.duration(200)} style={styles.backdrop}>
+    <Animated.View entering={FadeIn.duration(250)} exiting={FadeOut.duration(150)} style={styles.backdrop}>
       <Pressable style={styles.dismissArea} onPress={onDismiss} />
-      <Animated.View entering={SlideInDown.duration(400).springify()} style={[styles.card, { borderColor: color }]}>
-        {/* Verdict Badge */}
-        <View style={[styles.badge, { backgroundColor: bgColor }]}>
-          <Ionicons name={icon as any} size={18} color={color} />
-          <Text style={[styles.badgeText, { color }]}>{verdict}</Text>
+      <Animated.View entering={SlideInDown.duration(350).springify()} style={styles.card}>
+        {/* Verdict */}
+        <View style={styles.verdictRow}>
+          <View style={[styles.verdictDot, { backgroundColor: accentColor }]} />
+          <Text style={[styles.verdict, { color: accentColor }]}>
+            {isAffordable ? 'AFFORDABLE' : 'OVER BUDGET'}
+          </Text>
         </View>
 
-        {/* Item Info */}
+        {/* Item + Price */}
         <Text style={styles.itemName}>{result.item}</Text>
-        <Text style={[styles.price, { color }]}>${result.estimatedPrice.toFixed(2)}</Text>
+        <Text style={[styles.price, { color: accentColor }]}>
+          ${result.estimatedPrice.toFixed(2)}
+        </Text>
 
         {/* Voice Line */}
-        <View style={styles.voiceWrap}>
-          <Ionicons name="chatbubble-ellipses" size={16} color={Colors.accent} />
-          <Text style={styles.voiceLine}>"{result.voiceLine}"</Text>
+        <View style={styles.quoteWrap}>
+          <Text style={styles.quoteText}>"{result.voiceLine}"</Text>
         </View>
 
-        {/* Remaining Balance */}
-        <View style={styles.balanceRow}>
-          <Text style={styles.balanceLabel}>Remaining after purchase</Text>
-          <Text style={[styles.balanceValue, { color: result.fundsRemaining >= 0 ? Colors.green : Colors.red }]}>
+        {/* Remainder */}
+        <View style={styles.remainderRow}>
+          <Text style={styles.remainderLabel}>after purchase</Text>
+          <Text style={[styles.remainderValue, { color: result.fundsRemaining >= 0 ? Colors.white : Colors.red }]}>
             ${result.fundsRemaining.toFixed(2)}
           </Text>
         </View>
 
-        <Pressable style={[styles.dismissBtn, { backgroundColor: bgColor }]} onPress={onDismiss}>
-          <Text style={[styles.dismissText, { color }]}>Dismiss</Text>
+        {/* Dismiss */}
+        <Pressable
+          style={({ pressed }) => [styles.dismissBtn, pressed && { opacity: 0.7 }]}
+          onPress={onDismiss}
+        >
+          <Text style={styles.dismissText}>dismiss</Text>
         </Pressable>
       </Animated.View>
     </Animated.View>
@@ -67,7 +58,7 @@ export default function DecisionOverlay({ result, onDismiss }: Props) {
 const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.55)',
     justifyContent: 'flex-end',
     zIndex: 100,
   },
@@ -76,74 +67,85 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: Colors.bgCard,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: Radii.xl,
+    borderTopRightRadius: Radii.xl,
+    borderCurve: 'continuous',
     borderWidth: 1,
     borderBottomWidth: 0,
+    borderColor: Colors.borderLight,
     padding: Spacing.lg,
     paddingBottom: 50,
     gap: Spacing.md,
   },
-  badge: {
+  verdictRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-start',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+    gap: 8,
   },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 1,
+  verdictDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  verdict: {
+    fontFamily: Fonts.mono,
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 2,
   },
   itemName: {
-    fontSize: 22,
-    fontWeight: '800',
+    fontFamily: Fonts.mono,
+    fontSize: 20,
+    fontWeight: '700',
     color: Colors.white,
   },
   price: {
-    fontSize: 36,
-    fontWeight: '900',
+    fontFamily: Fonts.mono,
+    fontSize: 38,
+    fontWeight: '800',
     letterSpacing: -1,
   },
-  voiceWrap: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 8,
-    backgroundColor: Colors.accentDim,
+  quoteWrap: {
+    backgroundColor: Colors.bgElevated,
     padding: Spacing.md,
-    borderRadius: 12,
+    ...superellipse(Radii.md),
   },
-  voiceLine: {
-    flex: 1,
-    fontSize: 14,
+  quoteText: {
+    fontFamily: Fonts.mono,
+    fontSize: 13,
     color: Colors.textSecondary,
     fontStyle: 'italic',
     lineHeight: 20,
   },
-  balanceRow: {
+  remainderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingTop: Spacing.xs,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: Colors.border,
   },
-  balanceLabel: {
-    fontSize: 14,
+  remainderLabel: {
+    fontFamily: Fonts.mono,
+    fontSize: 12,
     color: Colors.textMuted,
   },
-  balanceValue: {
+  remainderValue: {
+    fontFamily: Fonts.mono,
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   dismissBtn: {
     alignItems: 'center',
     paddingVertical: 14,
-    borderRadius: 12,
-    marginTop: Spacing.sm,
+    backgroundColor: Colors.bgElevated,
+    ...superellipse(Radii.md),
   },
   dismissText: {
-    fontSize: 15,
-    fontWeight: '700',
+    fontFamily: Fonts.mono,
+    fontSize: 13,
+    fontWeight: '600',
+    color: Colors.textSecondary,
+    letterSpacing: 1,
   },
 });

@@ -1,29 +1,29 @@
 {
   "expo": {
-    "name": "JARVIS HUD",
-    "slug": "jarvis-hud",
+    "name": "C.H.U.D",
+    "slug": "chud-hud",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
-    "scheme": "jarvis",
+    "scheme": "chud",
     "newArchEnabled": true,
     "splash": {
-      "backgroundColor": "#0A0E1A"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jarvis.hud",
+      "bundleIdentifier": "com.chud.hud",
       "infoPlist": {
-        "NSCameraUsageDescription": "JARVIS needs camera access for the HUD scanner.",
-        "NSMicrophoneUsageDescription": "JARVIS needs microphone access for voice commands."
+        "NSCameraUsageDescription": "C.H.U.D needs camera access for the heads-up display.",
+        "NSMicrophoneUsageDescription": "C.H.U.D needs microphone access for voice commands."
       }
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#0A0E1A"
+        "backgroundColor": "#000000"
       },
-      "package": "com.jarvis.hud",
+      "package": "com.chud.hud",
       "permissions": ["CAMERA", "RECORD_AUDIO"]
     },
     "plugins": [
@@ -33,7 +33,7 @@
       [
         "expo-av",
         {
-          "microphonePermission": "Allow JARVIS to access your microphone."
+          "microphonePermission": "Allow C.H.U.D to access your microphone."
         }
       ]
     ]

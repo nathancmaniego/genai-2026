@@ -15,7 +15,7 @@ import google.generativeai as genai
 
 load_dotenv()
 
-app = FastAPI(title="JARVIS Brain", version="1.0.0")
+app = FastAPI(title="C.H.U.D Brain", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -33,21 +33,22 @@ if not SCAN_LOG_PATH.exists():
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY", ""))
 
-JARVIS_SYSTEM_PROMPT = """You are JARVIS, a witty and sophisticated AI financial guardian — think Tony Stark's butler, 
-but for wallets. You analyze items people are looking at through their camera and provide a financial assessment.
+SYSTEM_PROMPT = """You are C.H.U.D — Continuous Heads-Up Display — a sharp, deadpan AI financial advisor 
+that lives inside a camera overlay. You analyze items people are looking at and deliver blunt, 
+concise financial verdicts. Think dry wit, zero fluff, slight edge.
 
 You MUST respond in valid JSON with exactly these fields:
 {
   "item": "Name of the identified item",
   "estimated_price": 29.99,
-  "voice_line": "A witty, Jarvis-style one-liner about the purchase decision"
+  "voice_line": "A deadpan one-liner about the purchase decision"
 }
 
 Rules for the voice_line:
-- If the user CAN afford it: be encouraging but subtly witty. Example: "A fine choice, sir. Your wallet breathes a sigh of relief."
-- If the user is BORDERLINE: be cautious with dry humor. Example: "Technically feasible, sir, though your savings account just raised an eyebrow."
-- If the user CANNOT afford it: be protective with sharp wit. Example: "Sir, your wallet says no, but your ego says yes. I suggest the latter stays quiet."
-- Keep it under 25 words. Be British. Be dry. Be iconic.
+- If the user CAN afford it: curt approval. Example: "Green light. Your budget survives another day."
+- If the user is BORDERLINE: dry warning. Example: "Technically possible. Technically so is skydiving without a parachute."
+- If the user CANNOT afford it: blunt shutdown. Example: "Hard no. That purchase would make your savings account file for emotional damages."
+- Keep it under 20 words. Be deadpan. Be sharp. No exclamation marks. Ever.
 
 Price estimation rules:
 - Use your knowledge to estimate a realistic retail price for the item
@@ -79,7 +80,7 @@ class InitializeRequest(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"status": "online", "service": "JARVIS Brain v1.0"}
+    return {"status": "online", "service": "C.H.U.D Brain v1.0"}
 
 
 @app.post("/initialize")
@@ -87,7 +88,7 @@ async def initialize_budget(req: InitializeRequest):
     return {
         "status": "initialized",
         "daily_fun_budget": req.dailyFunBudget,
-        "message": f"Budget persona calibrated. Daily fun budget: ${req.dailyFunBudget:.2f}",
+        "message": f"Budget calibrated. Daily limit: ${req.dailyFunBudget:.2f}",
     }
 
 
@@ -113,7 +114,7 @@ async def analyze_frame(req: AnalyzeRequest):
 
     response = model.generate_content(
         [
-            JARVIS_SYSTEM_PROMPT,
+            SYSTEM_PROMPT,
             f"\n\nUser's financial context: {budget_context}\n\n"
             "Analyze this image. Identify the main item, estimate its price, "
             "and determine if the user can afford it based on their CURRENT BALANCE (not daily budget). "
@@ -132,7 +133,7 @@ async def analyze_frame(req: AnalyzeRequest):
 
     item_name = ai_result.get("item", "Unknown Item")
     estimated_price = float(ai_result.get("estimated_price", 0))
-    voice_line = ai_result.get("voice_line", "No comment, sir.")
+    voice_line = ai_result.get("voice_line", "No comment.")
 
     can_afford = req.budget.current_balance >= estimated_price
     funds_remaining = req.budget.current_balance - estimated_price
@@ -148,7 +149,7 @@ async def analyze_frame(req: AnalyzeRequest):
     try:
         audio_url = await generate_voice(voice_line)
     except Exception:
-        pass  # Voice is optional — don't fail the whole scan
+        pass
 
     log_scan(item_name, estimated_price, can_afford, severity, voice_line)
 

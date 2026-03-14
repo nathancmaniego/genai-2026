@@ -1,61 +1,52 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { Colors, Spacing } from '@/constants/theme';
-import Animated, {
-  FadeInDown,
-  FadeInUp,
-} from 'react-native-reanimated';
+import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 export default function OnboardingWelcome() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Animated.View entering={FadeInDown.duration(800).delay(200)} style={styles.iconWrap}>
-        <View style={styles.iconCircle}>
-          <Ionicons name="shield-checkmark" size={48} color={Colors.accent} />
-        </View>
+      <Animated.View entering={FadeInDown.duration(700).delay(200)} style={styles.badge}>
+        <Text style={styles.badgeText}>C.H.U.D</Text>
       </Animated.View>
 
-      <Animated.Text entering={FadeInDown.duration(800).delay(400)} style={styles.title}>
-        Welcome to JARVIS
+      <Animated.Text entering={FadeInDown.duration(700).delay(400)} style={styles.title}>
+        Continuous{'\n'}Heads-Up{'\n'}Display
       </Animated.Text>
 
-      <Animated.Text entering={FadeInDown.duration(800).delay(600)} style={styles.subtitle}>
-        Your proactive financial guardian.{'\n'}
-        Let's calibrate your spending profile so I can protect your wallet in real time.
+      <Animated.Text entering={FadeInDown.duration(700).delay(600)} style={styles.subtitle}>
+        Calibrate your spending limits.{'\n'}
+        Point at anything. Know instantly.
       </Animated.Text>
 
-      <Animated.View entering={FadeInUp.duration(800).delay(900)} style={styles.features}>
-        <FeatureRow icon="eye-outline" text="See what you're looking at" />
-        <FeatureRow icon="calculator-outline" text="Know if you can afford it" />
-        <FeatureRow icon="mic-outline" text="Get witty voice advice" />
+      <Animated.View entering={FadeInUp.duration(700).delay(900)} style={styles.features}>
+        <FeatureRow label="01" text="Identify items in frame" />
+        <FeatureRow label="02" text="Estimate price in real-time" />
+        <FeatureRow label="03" text="Verdict against your budget" />
       </Animated.View>
 
-      <Animated.View entering={FadeInUp.duration(600).delay(1200)} style={styles.bottomWrap}>
+      <Animated.View entering={FadeInUp.duration(500).delay(1200)} style={styles.bottomWrap}>
         <Pressable
           style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
           onPress={() => router.push('/onboarding/income')}
         >
-          <Text style={styles.buttonText}>Calibrate My Profile</Text>
-          <Ionicons name="arrow-forward" size={20} color={Colors.bg} />
+          <Text style={styles.buttonText}>begin calibration</Text>
         </Pressable>
 
         <Text style={styles.disclaimer}>
-          This data stays on your device. No bank connections required.
+          all data stored locally on device
         </Text>
       </Animated.View>
     </View>
   );
 }
 
-function FeatureRow({ icon, text }: { icon: string; text: string }) {
+function FeatureRow({ label, text }: { label: string; text: string }) {
   return (
     <View style={styles.featureRow}>
-      <View style={styles.featureDot}>
-        <Ionicons name={icon as any} size={20} color={Colors.accent} />
-      </View>
+      <Text style={styles.featureLabel}>{label}</Text>
       <Text style={styles.featureText}>{text}</Text>
     </View>
   );
@@ -66,58 +57,61 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.bg,
     paddingHorizontal: Spacing.lg,
-    paddingTop: 80,
+    paddingTop: 100,
   },
-  iconWrap: {
-    alignItems: 'center',
+  badge: {
+    alignSelf: 'flex-start',
+    backgroundColor: Colors.white,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
     marginBottom: Spacing.xl,
+    ...superellipse(Radii.sm),
   },
-  iconCircle: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    backgroundColor: Colors.accentDim,
-    borderWidth: 1.5,
-    borderColor: Colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
+  badgeText: {
+    fontFamily: Fonts.mono,
+    fontSize: 13,
+    fontWeight: '700',
+    color: Colors.bg,
+    letterSpacing: 2,
   },
   title: {
-    fontSize: 32,
+    fontFamily: Fonts.mono,
+    fontSize: 34,
     fontWeight: '800',
     color: Colors.white,
-    textAlign: 'center',
+    lineHeight: 42,
     letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 16,
+    fontFamily: Fonts.mono,
+    fontSize: 14,
     color: Colors.textSecondary,
-    textAlign: 'center',
-    marginTop: Spacing.md,
-    lineHeight: 24,
-    paddingHorizontal: Spacing.md,
+    marginTop: Spacing.lg,
+    lineHeight: 22,
   },
   features: {
     marginTop: Spacing.xxl,
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   featureRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: Colors.border,
   },
-  featureDot: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Colors.accentDim,
-    alignItems: 'center',
-    justifyContent: 'center',
+  featureLabel: {
+    fontFamily: Fonts.mono,
+    fontSize: 12,
+    color: Colors.accent,
+    fontWeight: '700',
+    width: 28,
   },
   featureText: {
-    fontSize: 16,
+    fontFamily: Fonts.mono,
+    fontSize: 14,
     color: Colors.textPrimary,
-    fontWeight: '500',
   },
   bottomWrap: {
     flex: 1,
@@ -126,29 +120,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.white,
     paddingVertical: 18,
-    paddingHorizontal: Spacing.xl,
-    borderRadius: 16,
     width: '100%',
+    ...superellipse(Radii.lg),
   },
   buttonPressed: {
-    opacity: 0.85,
-    transform: [{ scale: 0.98 }],
+    opacity: 0.8,
+    transform: [{ scale: 0.985 }],
   },
   buttonText: {
-    fontSize: 17,
-    fontWeight: '700',
+    fontFamily: Fonts.mono,
+    fontSize: 15,
+    fontWeight: '600',
     color: Colors.bg,
+    letterSpacing: 1,
   },
   disclaimer: {
-    fontSize: 12,
+    fontFamily: Fonts.mono,
+    fontSize: 11,
     color: Colors.textMuted,
     textAlign: 'center',
     marginTop: Spacing.md,
+    letterSpacing: 0.5,
   },
 });

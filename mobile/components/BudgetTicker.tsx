@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { Colors, Spacing } from '@/constants/theme';
+import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 
 interface Props {
   currentBalance: number;
@@ -10,20 +9,21 @@ interface Props {
 
 export default function BudgetTicker({ currentBalance, dailyBudget }: Props) {
   const ratio = dailyBudget > 0 ? currentBalance / dailyBudget : 0;
-  const color = ratio > 0.5 ? Colors.green : ratio > 0.2 ? Colors.yellow : Colors.red;
+  const dot = ratio > 0.5 ? Colors.white : ratio > 0.2 ? Colors.textSecondary : Colors.red;
 
   return (
-    <Animated.View entering={FadeIn.duration(600)} style={styles.container}>
+    <Animated.View entering={FadeIn.duration(500)} style={styles.container}>
       <View style={styles.inner}>
         <View style={styles.left}>
-          <View style={[styles.indicator, { backgroundColor: color }]} />
-          <Text style={styles.label}>BALANCE</Text>
+          <View style={[styles.dot, { backgroundColor: dot }]} />
+          <Text style={styles.label}>BAL</Text>
         </View>
         <View style={styles.right}>
-          <Text style={[styles.amount, { color }]}>${currentBalance.toFixed(2)}</Text>
-          <Text style={styles.divider}>/</Text>
-          <Text style={styles.budget}>${dailyBudget.toFixed(2)}</Text>
-          <Ionicons name="wallet" size={14} color={Colors.textMuted} style={{ marginLeft: 4 }} />
+          <Text style={[styles.amount, ratio <= 0.2 && { color: Colors.red }]}>
+            ${currentBalance.toFixed(2)}
+          </Text>
+          <Text style={styles.sep}>/</Text>
+          <Text style={styles.total}>${dailyBudget.toFixed(2)}</Text>
         </View>
       </View>
     </Animated.View>
@@ -33,7 +33,7 @@ export default function BudgetTicker({ currentBalance, dailyBudget }: Props) {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 24,
     left: Spacing.lg,
     right: Spacing.lg,
   },
@@ -41,46 +41,50 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(10, 14, 26, 0.85)',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
     borderWidth: 1,
-    borderColor: Colors.border,
-    borderRadius: 14,
+    borderColor: 'rgba(255,255,255,0.08)',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm + 2,
-    backdropFilter: 'blur(10px)',
+    ...superellipse(Radii.md),
   },
   left: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
-  indicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
   },
   label: {
-    fontSize: 11,
+    fontFamily: Fonts.mono,
+    fontSize: 10,
     fontWeight: '700',
     color: Colors.textMuted,
-    letterSpacing: 1.2,
+    letterSpacing: 2,
   },
   right: {
     flexDirection: 'row',
     alignItems: 'baseline',
   },
   amount: {
-    fontSize: 22,
-    fontWeight: '800',
+    fontFamily: Fonts.mono,
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.white,
   },
-  divider: {
-    fontSize: 16,
-    color: Colors.textMuted,
-    marginHorizontal: 3,
-  },
-  budget: {
+  sep: {
+    fontFamily: Fonts.mono,
     fontSize: 14,
     color: Colors.textMuted,
-    fontWeight: '600',
+    marginHorizontal: 2,
+  },
+  total: {
+    fontFamily: Fonts.mono,
+    fontSize: 13,
+    color: Colors.textMuted,
+    fontWeight: '500',
   },
 });

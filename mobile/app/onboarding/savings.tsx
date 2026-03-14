@@ -11,9 +11,9 @@ export default function SavingsScreen() {
     <OnboardingStep
       step={2}
       totalSteps={3}
-      icon="shield-outline"
-      title="Savings Goal"
-      description="What's your minimum savings target per month? Your financial safety net."
+      label="safety net"
+      title="Monthly savings goal"
+      description="The minimum you want to put away each month. Your financial floor."
       value={value}
       onChangeText={setValue}
       placeholder="500"

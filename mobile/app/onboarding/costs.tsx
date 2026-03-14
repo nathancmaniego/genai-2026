@@ -11,12 +11,12 @@ export default function CostsScreen() {
     <OnboardingStep
       step={1}
       totalSteps={3}
-      icon="home-outline"
-      title="Fixed Costs"
-      description="Total monthly bills — rent, utilities, subscriptions, insurance. Everything that auto-drafts."
+      label="fixed costs"
+      title="Monthly obligations"
+      description="Rent, utilities, subscriptions, insurance. Everything that auto-drafts."
       value={value}
       onChangeText={setValue}
-      placeholder="2,200"
+      placeholder="2200"
       canAdvance={!!value && parseFloat(value) > 0}
       onBack={() => router.back()}
       onNext={() =>

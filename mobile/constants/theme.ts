@@ -1,25 +1,40 @@
+import { Platform } from 'react-native';
+
 export const Colors = {
-  bg: '#0A0E1A',
-  bgCard: '#111827',
-  bgCardLight: '#1F2937',
-  accent: '#00D4FF',
-  accentDim: 'rgba(0, 212, 255, 0.15)',
-  accentGlow: 'rgba(0, 212, 255, 0.4)',
-  green: '#00FF88',
-  greenDim: 'rgba(0, 255, 136, 0.15)',
-  red: '#FF3B5C',
-  redDim: 'rgba(255, 59, 92, 0.15)',
-  yellow: '#FFD600',
+  bg: '#000000',
+  bgCard: '#0A0A0A',
+  bgCardLight: '#141414',
+  bgElevated: '#1A1A1A',
+
+  accent: '#5CE0D2',
+  accentDim: 'rgba(92, 224, 210, 0.08)',
+  accentMuted: 'rgba(92, 224, 210, 0.35)',
+
+  green: '#5CE0D2',
+  greenDim: 'rgba(92, 224, 210, 0.06)',
+  red: '#FF4757',
+  redDim: 'rgba(255, 71, 87, 0.06)',
+  yellow: '#AAAAAA',
+
   white: '#FFFFFF',
-  textPrimary: '#F1F5F9',
-  textSecondary: '#94A3B8',
-  textMuted: '#64748B',
-  border: '#1E293B',
-  borderLight: '#334155',
+  textPrimary: '#FFFFFF',
+  textSecondary: '#777777',
+  textMuted: '#444444',
+
+  border: '#1A1A1A',
+  borderLight: '#252525',
 };
 
 export const Fonts = {
-  mono: 'SpaceMono' as const,
+  mono: Platform.select({ ios: 'Menlo', default: 'monospace' }),
+};
+
+export const Radii = {
+  sm: 10,
+  md: 16,
+  lg: 22,
+  xl: 28,
+  pill: 100,
 };
 
 export const Spacing = {
@@ -30,3 +45,9 @@ export const Spacing = {
   xl: 32,
   xxl: 48,
 };
+
+export const superellipse = (radius: number) =>
+  ({
+    borderRadius: radius,
+    borderCurve: 'continuous' as const,
+  }) as const;

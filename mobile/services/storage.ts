@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const KEYS = {
-  ONBOARDED: 'jarvis_onboarded',
-  BUDGET: 'jarvis_budget',
+  ONBOARDED: 'chud_onboarded',
+  BUDGET: 'chud_budget',
+  API_URL: 'chud_api_url',
 };
 
 export interface BudgetProfile {
@@ -47,4 +48,12 @@ export async function updateBalance(newBalance: number): Promise<void> {
     profile.currentBalance = newBalance;
     await AsyncStorage.setItem(KEYS.BUDGET, JSON.stringify(profile));
   }
+}
+
+export async function saveApiUrl(url: string): Promise<void> {
+  await AsyncStorage.setItem(KEYS.API_URL, url);
+}
+
+export async function getApiUrl(): Promise<string | null> {
+  return AsyncStorage.getItem(KEYS.API_URL);
 }
