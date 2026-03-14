@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "JARVIS HUD",
+    "slug": "jarvis-hud",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "jarvis",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#0A0E1A"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jarvis.hud",
+      "infoPlist": {
+        "NSCameraUsageDescription": "JARVIS needs camera access for the HUD scanner.",
+        "NSMicrophoneUsageDescription": "JARVIS needs microphone access for voice commands."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0E1A"
+      },
+      "package": "com.jarvis.hud",
+      "permissions": ["CAMERA", "RECORD_AUDIO"]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-camera",
+      "expo-screen-orientation",
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow JARVIS to access your microphone."
+        }
+      ]
+    ]
+  }
+}

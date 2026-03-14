@@ -1,0 +1,11 @@
+node_modules/
+venv/
+.expo/
+dist/
+__pycache__/
+*.pyc
+.env
+audio_cache/
+scan_log.json
+*.mp3
+.DS_Store

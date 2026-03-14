@@ -1,0 +1,65 @@
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import {
+  BudgetProfile,
+  getBudgetProfile,
+  saveBudgetProfile,
+  updateBalance as updateStoredBalance,
+} from '@/services/storage';
+
+interface BudgetContextType {
+  profile: BudgetProfile | null;
+  loading: boolean;
+  setProfile: (profile: BudgetProfile) => Promise<void>;
+  deductFromBalance: (amount: number) => Promise<void>;
+  refreshProfile: () => Promise<void>;
+}
+
+const BudgetContext = createContext<BudgetContextType>({
+  profile: null,
+  loading: true,
+  setProfile: async () => {},
+  deductFromBalance: async () => {},
+  refreshProfile: async () => {},
+});
+
+export function BudgetProvider({ children }: { children: React.ReactNode }) {
+  const [profile, setProfileState] = useState<BudgetProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const refreshProfile = useCallback(async () => {
+    const stored = await getBudgetProfile();
+    setProfileState(stored);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    refreshProfile();
+  }, [refreshProfile]);
+
+  const setProfile = useCallback(async (p: BudgetProfile) => {
+    await saveBudgetProfile(p);
+    setProfileState(p);
+  }, []);
+
+  const deductFromBalance = useCallback(
+    async (amount: number) => {
+      if (!profile) return;
+      const newBalance = Math.max(0, profile.currentBalance - amount);
+      await updateStoredBalance(newBalance);
+      setProfileState((prev) => (prev ? { ...prev, currentBalance: newBalance } : null));
+    },
+    [profile]
+  );
+
+  return (
+    <BudgetContext.Provider
+      value={{ profile, loading, setProfile, deductFromBalance, refreshProfile }}
+    >
+      {children}
+    </BudgetContext.Provider>
+  );
+}
+
+export function useBudget() {
+  return useContext(BudgetContext);
+}
