@@ -178,16 +178,41 @@ async def scan_image(req: ScanRequest):
 
     response = model.generate_content(
         [
-            "One short paragraph only. Identify the item, give one price (e.g. $X or $X–$Y), "
-            "one sentence on value, and 1–2 cheaper alternatives with prices. "
-            "Max 3–4 lines total. No bullet lists, no headers, no intro. Plain prose.",
+            "Analyze this image and respond with ONLY a valid JSON object (no markdown, no code fences):\n"
+            '{\n'
+            '  "text": "One short paragraph. Identify the item, mention its price, '
+            'one sentence on value, and 1-2 cheaper alternatives with prices. '
+            'Max 3-4 lines. Plain prose, no bullet lists, no headers.",\n'
+            '  "estimated_price": 29.99\n'
+            '}\n\n'
+            "Rules for estimated_price:\n"
+            "- If you can see a price tag in the image, use that exact price as a float.\n"
+            "- If you can confidently identify the item and estimate its retail price, use that.\n"
+            "- If you cannot determine a specific price, set estimated_price to null.\n"
+            "- Always round to 2 decimal places when providing a price.",
             {"mime_type": "image/jpeg", "data": image_bytes},
         ]
     )
 
-    result_text = response.text.strip()
-    print(f"[SCAN] Gemini response ({len(result_text)} chars):\n{result_text}\n---")
-    return {"text": result_text}
+    try:
+        raw = response.text.strip()
+        if raw.startswith("```"):
+            raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+        scan_result = json.loads(raw)
+    except (json.JSONDecodeError, IndexError):
+        print(f"[SCAN] Failed to parse JSON, falling back to raw text:\n{response.text}\n---")
+        return {"text": response.text.strip(), "estimated_price": None}
+
+    result_text = scan_result.get("text", response.text.strip())
+    estimated_price = scan_result.get("estimated_price")
+    if estimated_price is not None:
+        try:
+            estimated_price = round(float(estimated_price), 2)
+        except (ValueError, TypeError):
+            estimated_price = None
+
+    print(f"[SCAN] Gemini response ({len(result_text)} chars, price={estimated_price}):\n{result_text}\n---")
+    return {"text": result_text, "estimated_price": estimated_price}
 
 
 @app.post("/analyze")

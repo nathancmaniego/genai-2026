@@ -73,9 +73,14 @@ export async function detectGesture(
   return res.json();
 }
 
+export interface ScanResponse {
+  text: string;
+  estimatedPrice: number | null;
+}
+
 export async function scanImage(
   base64Image: string
-): Promise<string> {
+): Promise<ScanResponse> {
   const res = await fetch(`${apiBaseUrl}/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -83,7 +88,10 @@ export async function scanImage(
   });
   if (!res.ok) throw new Error(`Scan error: ${res.status}`);
   const data = await res.json();
-  return (data?.text != null) ? String(data.text) : '';
+  return {
+    text: (data?.text != null) ? String(data.text) : '',
+    estimatedPrice: data?.estimated_price ?? null,
+  };
 }
 
 export async function getScanHistory() {

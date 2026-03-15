@@ -4,7 +4,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Audio } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { useBudget } from '@/context/BudgetContext';
-import { analyzeFrame, AnalyzeResponse, setApiBaseUrl, detectGesture, scanImage } from '@/services/api';
+import { analyzeFrame, AnalyzeResponse, ScanResponse, setApiBaseUrl, detectGesture, scanImage } from '@/services/api';
 import { getApiUrl } from '@/services/storage';
 import Reticle from '@/components/Reticle';
 import ScanningBar from '@/components/ScanningBar';
@@ -27,14 +27,14 @@ export default function HudScreen() {
   const [scanProgress, setScanProgress] = useState(0);
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState<AnalyzeResponse | null>(null);
-  const [geminiText, setGeminiText] = useState<string | null>(null);
+  const [scanResult, setScanResult] = useState<ScanResponse | null>(null);
 
   const palmTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const palmStartRef = useRef<number>(0);
   const gestureActiveRef = useRef(false);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const geminiTextRef = useRef<string | null>(null);
-  geminiTextRef.current = geminiText;
+  const scanResultRef = useRef<ScanResponse | null>(null);
+  scanResultRef.current = scanResult;
 
   useEffect(() => {
     getApiUrl().then((url) => {
@@ -77,8 +77,8 @@ export default function HudScreen() {
       const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
       if (!photo?.base64) throw new Error('Failed to capture frame');
 
-      const text = await scanImage(photo.base64);
-      setGeminiText(text ?? '');
+      const scan = await scanImage(photo.base64);
+      setScanResult(scan);
     } catch (err: any) {
       Alert.alert('scan failed', err.message || 'Could not analyze the frame.');
     } finally {
@@ -94,15 +94,18 @@ export default function HudScreen() {
     }
     gestureActiveRef.current = false;
     setResult(null);
-    setGeminiText(null);
+    setScanResult(null);
   }, [result, deductFromBalance]);
+
+  const handleScanConfirm = useCallback((price: number) => {
+    deductFromBalance(price);
+    gestureActiveRef.current = false;
+    setScanResult(null);
+  }, [deductFromBalance]);
 
   useEffect(() => {
     pollingRef.current = setInterval(async () => {
-      const skip = !cameraRef.current || scanning || result || geminiTextRef.current || gestureActiveRef.current;
-      // #region agent log
-      fetch('http://127.0.0.1:7372/ingest/f5f8c5bd-217f-4878-839d-5d3ac34bab0e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8110b2'},body:JSON.stringify({sessionId:'8110b2',location:'hud:poll',message:'poll_tick',data:{skip,hasGeminiText:!!geminiTextRef.current,gestureActive:gestureActiveRef.current},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-      // #endregion
+      const skip = !cameraRef.current || scanning || result || scanResultRef.current || gestureActiveRef.current;
       if (skip) return;
       try {
         const photo = await cameraRef.current.takePictureAsync({
@@ -185,8 +188,13 @@ export default function HudScreen() {
           />
         )}
 
-        {geminiText ? (
-          <ScanResultOverlay text={geminiText} onDismiss={handleDismiss} />
+        {scanResult ? (
+          <ScanResultOverlay
+            text={scanResult.text}
+            price={scanResult.estimatedPrice}
+            onConfirm={handleScanConfirm}
+            onDismiss={handleDismiss}
+          />
         ) : null}
 
         {result && <DecisionOverlay result={result} onDismiss={handleDismiss} />}
