@@ -1,8 +1,11 @@
 import io
+import logging
 import os
 import json
 import base64
+import time
 import uuid
+from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
@@ -12,7 +15,7 @@ from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python import vision as mp_vision
 from PIL import Image
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -20,6 +23,17 @@ from pydantic import BaseModel
 import google.generativeai as genai
 
 load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Railtown: when RAILTOWN_API_KEY is set, Python logging is sent to Conductr
+try:
+    import railtownai
+    if os.getenv("RAILTOWN_API_KEY"):
+        railtownai.init(os.getenv("RAILTOWN_API_KEY"))
+except Exception:
+    pass
 
 app = FastAPI(title="C.H.U.D Brain", version="1.0.0")
 
@@ -29,6 +43,30 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Rate limit: (ip, endpoint) -> list of request timestamps (sliding window)
+_rate_limit_window_sec = 60
+_rate_limit_max = 30  # max requests per window per IP per endpoint
+_rate_limit_store: dict[tuple[str, str], list[float]] = defaultdict(list)
+
+
+def _rate_limit_key(ip: str, endpoint: str) -> tuple[str, str]:
+    return (ip or "unknown", endpoint)
+
+
+def _check_rate_limit(ip: str, endpoint: str) -> None:
+    now = time.monotonic()
+    key = _rate_limit_key(ip, endpoint)
+    times = _rate_limit_store[key]
+    # drop timestamps outside window
+    cutoff = now - _rate_limit_window_sec
+    while times and times[0] < cutoff:
+        times.pop(0)
+    if len(times) >= _rate_limit_max:
+        logger.warning("Rate limit exceeded", extra={"ip": ip, "endpoint": endpoint})
+        raise HTTPException(status_code=429, detail="Too many requests. Try again in a minute.")
+    times.append(now)
+
 
 SCAN_LOG_PATH = Path("scan_log.json")
 AUDIO_DIR = Path("audio_cache")
@@ -190,7 +228,8 @@ class ScanRequest(BaseModel):
 
 
 @app.post("/scan")
-async def scan_image(req: ScanRequest):
+async def scan_image(request: Request, req: ScanRequest):
+    _check_rate_limit(request.client.host if request.client else "unknown", "scan")
     if not os.getenv("GEMINI_API_KEY"):
         raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
 
@@ -200,7 +239,7 @@ async def scan_image(req: ScanRequest):
         raise HTTPException(status_code=400, detail="Invalid base64 image")
 
     model = genai.GenerativeModel("gemini-2.5-flash")
-
+    logger.info("Gemini scan request")
     response = model.generate_content(
         [
             "Analyze this image and respond with ONLY a valid JSON object (no markdown, no code fences):\n"
@@ -225,7 +264,7 @@ async def scan_image(req: ScanRequest):
             raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
         scan_result = json.loads(raw)
     except (json.JSONDecodeError, IndexError):
-        print(f"[SCAN] Failed to parse JSON, falling back to raw text:\n{response.text}\n---")
+        logger.warning("Gemini scan: failed to parse JSON, using raw text")
         return {"text": response.text.strip(), "estimated_price": None}
 
     result_text = scan_result.get("text", response.text.strip())
@@ -236,12 +275,13 @@ async def scan_image(req: ScanRequest):
         except (ValueError, TypeError):
             estimated_price = None
 
-    print(f"[SCAN] Gemini response ({len(result_text)} chars, price={estimated_price}):\n{result_text}\n---")
+    logger.info("Gemini scan ok", extra={"response_length": len(result_text), "estimated_price": estimated_price})
     return {"text": result_text, "estimated_price": estimated_price}
 
 
 @app.post("/analyze")
-async def analyze_frame(req: AnalyzeRequest):
+async def analyze_frame(request: Request, req: AnalyzeRequest):
+    _check_rate_limit(request.client.host if request.client else "unknown", "analyze")
     if not os.getenv("GEMINI_API_KEY"):
         raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
 
@@ -259,7 +299,7 @@ async def analyze_frame(req: AnalyzeRequest):
     )
 
     model = genai.GenerativeModel("google/gemma-3-1b-it")
-
+    logger.info("Gemini analyze request")
     response = model.generate_content(
         [
             SYSTEM_PROMPT,
@@ -277,6 +317,7 @@ async def analyze_frame(req: AnalyzeRequest):
             text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
         ai_result = json.loads(text)
     except (json.JSONDecodeError, IndexError):
+        logger.exception("Gemini analyze: failed to parse response")
         raise HTTPException(status_code=500, detail=f"Failed to parse AI response: {response.text}")
 
     item_name = ai_result.get("item", "Unknown Item")
@@ -307,6 +348,7 @@ async def analyze_frame(req: AnalyzeRequest):
         pass
 
     log_scan(item_name, estimated_price, can_afford, severity, voice_line)
+    logger.info("Gemini analyze ok", extra={"item": item_name, "severity": severity})
 
     return {
         "item": item_name,
