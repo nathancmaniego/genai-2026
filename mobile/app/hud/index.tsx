@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { View, StyleSheet, Text, Alert, Pressable } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { Audio } from 'expo-av';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useBudget } from '@/context/BudgetContext';
 import { analyzeFrame, AnalyzeResponse, ScanResponse, setApiBaseUrl, detectGesture, scanImage } from '@/services/api';
 import { getApiUrl, getUserProfile } from '@/services/storage';
@@ -22,6 +23,7 @@ export default function HudScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const { profile, deductFromBalance } = useBudget();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const [palmDetected, setPalmDetected] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
@@ -113,46 +115,51 @@ export default function HudScreen() {
     thumbsActedRef.current = false;
   }, [scanResult]);
 
-  useEffect(() => {
-    pollingRef.current = setInterval(async () => {
-      if (!cameraRef.current || scanning || result) return;
+  useFocusEffect(
+    useCallback(() => {
+      pollingRef.current = setInterval(async () => {
+        if (!cameraRef.current || scanning || result) return;
 
-      const awaitingConfirm = scanResultRef.current?.estimatedPrice != null;
+        const awaitingConfirm = scanResultRef.current?.estimatedPrice != null;
 
-      if (!awaitingConfirm && (scanResultRef.current || gestureActiveRef.current)) return;
+        if (!awaitingConfirm && (scanResultRef.current || gestureActiveRef.current)) return;
 
-      try {
-        const photo = await cameraRef.current.takePictureAsync({
-          base64: true,
-          quality: 0.1,
-          skipProcessing: true,
-        });
-        if (!photo?.base64) return;
+        try {
+          const photo = await cameraRef.current.takePictureAsync({
+            base64: true,
+            quality: 0.1,
+            skipProcessing: true,
+          });
+          if (!photo?.base64) return;
 
-        const gesture = await detectGesture(photo.base64);
+          const gesture = await detectGesture(photo.base64);
 
-        if (awaitingConfirm) {
-          if (thumbsActedRef.current) return;
-          const price = scanResultRef.current!.estimatedPrice!;
-          if (gesture.thumbs_up) {
-            thumbsActedRef.current = true;
-            handleScanConfirm(price);
+          if (awaitingConfirm) {
+            if (thumbsActedRef.current) return;
+            const price = scanResultRef.current!.estimatedPrice!;
+            if (gesture.thumbs_up) {
+              thumbsActedRef.current = true;
+              handleScanConfirm(price);
+            }
+          } else {
+            if (gesture.palm_open && !gestureActiveRef.current) {
+              gestureActiveRef.current = true;
+              simulatePalmStart();
+            }
           }
-        } else {
-          if (gesture.palm_open && !gestureActiveRef.current) {
-            gestureActiveRef.current = true;
-            simulatePalmStart();
-          }
+        } catch {
+          // gesture polling is best-effort
         }
-      } catch {
-        // gesture polling is best-effort
-      }
-    }, GESTURE_POLL_MS);
+      }, GESTURE_POLL_MS);
 
-    return () => {
-      if (pollingRef.current) clearInterval(pollingRef.current);
-    };
-  }, [scanning, result, simulatePalmStart, handleScanConfirm, handleDismiss]);
+      return () => {
+        if (pollingRef.current) {
+          clearInterval(pollingRef.current);
+          pollingRef.current = null;
+        }
+      };
+    }, [scanning, result, simulatePalmStart, handleScanConfirm])
+  );
 
   const handlePalmEnd = useCallback(() => {
     gestureActiveRef.current = false;
@@ -186,9 +193,9 @@ export default function HudScreen() {
           onTouchCancel={handlePalmEnd}
         />
 
-        {/* Profile button — top-left, above touch overlay */}
+        {/* Profile button — below status bar */}
         <Pressable
-          style={({ pressed }) => [styles.menuBtn, pressed && styles.menuBtnPressed]}
+          style={({ pressed }) => [styles.menuBtn, { top: insets.top + 12 }, pressed && styles.menuBtnPressed]}
           onPress={() => router.push('/profile')}
         >
           <Text style={styles.menuText}>c.h.u.d</Text>
@@ -240,7 +247,6 @@ const styles = StyleSheet.create({
   },
   menuBtn: {
     position: 'absolute',
-    top: 16,
     left: 16,
     zIndex: 20,
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
