@@ -39,20 +39,23 @@ export default function ScanResultOverlay({ text, price, onConfirm, onDismiss }:
       <Text style={styles.body}>{formatted}</Text>
 
       {hasPrice ? (
-        <View style={styles.actions}>
-          <Pressable
-            style={({ pressed }) => [styles.btn, styles.confirmBtn, pressed && styles.confirmBtnPressed]}
-            onPress={() => onConfirm(price)}
-          >
-            <Text style={styles.confirmText}>confirm · ${price.toFixed(2)}</Text>
-          </Pressable>
-          <Pressable
-            style={({ pressed }) => [styles.btn, styles.declineBtn, pressed && styles.declineBtnPressed]}
-            onPress={onDismiss}
-          >
-            <Text style={styles.declineText}>decline</Text>
-          </Pressable>
-        </View>
+        <>
+          <View style={styles.actions}>
+            <Pressable
+              style={({ pressed }) => [styles.btn, styles.confirmBtn, pressed && styles.confirmBtnPressed]}
+              onPress={() => onConfirm(price)}
+            >
+              <Text style={styles.confirmText}>confirm · ${price.toFixed(2)}</Text>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) => [styles.btn, styles.declineBtn, pressed && styles.declineBtnPressed]}
+              onPress={onDismiss}
+            >
+              <Text style={styles.declineText}>decline</Text>
+            </Pressable>
+          </View>
+          <Text style={styles.gestureHint}>thumbs up to confirm · thumbs down to decline</Text>
+        </>
       ) : (
         <Text style={styles.tapHint}>tap to dismiss · auto-closes in 12s</Text>
       )}
@@ -135,6 +138,13 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: Colors.textMuted,
     letterSpacing: 1,
+  },
+  gestureHint: {
+    fontFamily: Fonts.mono,
+    fontSize: 9,
+    color: Colors.textMuted,
+    letterSpacing: 1,
+    textAlign: 'center',
   },
   actions: {
     flexDirection: 'row',
