@@ -1,16 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, { FadeIn, FadeOut, SlideInRight } from 'react-native-reanimated';
 import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 
 const AUTO_DISMISS_MS = 12000;
-
-interface Props {
-  text: string;
-  price: number | null;
-  onConfirm: (price: number) => void;
-  onDismiss: () => void;
-}
+const CONFIRM_COUNTDOWN_MS = 10000;
+const COUNTDOWN_TICK_MS = 50;
 
 function formatScanText(raw: string): string {
   return raw
@@ -19,15 +14,43 @@ function formatScanText(raw: string): string {
     .trim();
 }
 
+interface Props {
+  text: string;
+  price: number | null;
+  onConfirm: (price: number) => void;
+  onDismiss: () => void;
+}
+
 export default function ScanResultOverlay({ text, price, onConfirm, onDismiss }: Props) {
   const formatted = formatScanText(text);
   const hasPrice = price != null;
 
+  const [countdownLeft, setCountdownLeft] = useState(hasPrice ? CONFIRM_COUNTDOWN_MS : 0);
+
   useEffect(() => {
-    if (hasPrice) return;
-    const t = setTimeout(onDismiss, AUTO_DISMISS_MS);
-    return () => clearTimeout(t);
+    if (!hasPrice) {
+      const t = setTimeout(onDismiss, AUTO_DISMISS_MS);
+      return () => clearTimeout(t);
+    }
+    setCountdownLeft(CONFIRM_COUNTDOWN_MS);
   }, [onDismiss, hasPrice]);
+
+  useEffect(() => {
+    if (!hasPrice) return;
+    const t = setInterval(() => {
+      setCountdownLeft((prev) => {
+        const next = prev - COUNTDOWN_TICK_MS;
+        if (next <= 0) {
+          onDismiss();
+          return 0;
+        }
+        return next;
+      });
+    }, COUNTDOWN_TICK_MS);
+    return () => clearInterval(t);
+  }, [hasPrice, onDismiss]);
+
+  const countdownProgress = hasPrice ? countdownLeft / CONFIRM_COUNTDOWN_MS : 1;
 
   const cardContent = (
     <>
@@ -40,21 +63,20 @@ export default function ScanResultOverlay({ text, price, onConfirm, onDismiss }:
 
       {hasPrice ? (
         <>
-          <View style={styles.actions}>
+          <View style={styles.confirmBar}>
             <Pressable
-              style={({ pressed }) => [styles.btn, styles.confirmBtn, pressed && styles.confirmBtnPressed]}
+              style={({ pressed }) => [styles.confirmBtnFull, pressed && styles.confirmBtnPressed]}
               onPress={() => onConfirm(price)}
             >
               <Text style={styles.confirmText}>confirm · ${price.toFixed(2)}</Text>
             </Pressable>
-            <Pressable
-              style={({ pressed }) => [styles.btn, styles.declineBtn, pressed && styles.declineBtnPressed]}
-              onPress={onDismiss}
-            >
-              <Text style={styles.declineText}>decline</Text>
-            </Pressable>
+            <View style={styles.countdownTrack}>
+              <View
+                style={[styles.countdownFill, { width: `${countdownProgress * 100}%` }]}
+              />
+            </View>
           </View>
-          <Text style={styles.gestureHint}>thumbs up to confirm · thumbs down to decline</Text>
+          <Text style={styles.gestureHint}>thumbs up to confirm or press confirm</Text>
         </>
       ) : (
         <Text style={styles.tapHint}>tap to dismiss · auto-closes in 12s</Text>
@@ -91,11 +113,11 @@ const styles = StyleSheet.create({
     bottom: Spacing.xl + 40,
     right: Spacing.lg,
     left: Spacing.xl,
-    alignItems: 'flex-end',
+    alignItems: 'stretch',
     zIndex: 100,
   },
   card: {
-    maxWidth: 380,
+    width: '100%',
     ...superellipse(Radii.lg),
     overflow: 'hidden',
   },
@@ -146,21 +168,21 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     textAlign: 'center',
   },
-  actions: {
-    flexDirection: 'row',
-    gap: Spacing.sm,
+  confirmBar: {
+    width: '100%',
     marginTop: Spacing.xs,
+    gap: 0,
   },
-  btn: {
-    flex: 1,
-    paddingVertical: 10,
+  confirmBtnFull: {
+    width: '100%',
+    paddingVertical: 12,
     alignItems: 'center',
-    ...superellipse(Radii.sm),
-  },
-  confirmBtn: {
+    justifyContent: 'center',
     backgroundColor: 'rgba(92, 224, 210, 0.15)',
     borderWidth: 1,
     borderColor: 'rgba(92, 224, 210, 0.4)',
+    borderTopLeftRadius: Radii.sm,
+    borderTopRightRadius: Radii.sm,
   },
   confirmBtnPressed: {
     backgroundColor: 'rgba(92, 224, 210, 0.3)',
@@ -172,19 +194,17 @@ const styles = StyleSheet.create({
     color: Colors.accent,
     letterSpacing: 1,
   },
-  declineBtn: {
-    backgroundColor: 'rgba(255, 255, 255, 0.06)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+  countdownTrack: {
+    width: '100%',
+    height: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderBottomLeftRadius: Radii.sm,
+    borderBottomRightRadius: Radii.sm,
+    overflow: 'hidden',
   },
-  declineBtnPressed: {
-    backgroundColor: 'rgba(255, 255, 255, 0.12)',
-  },
-  declineText: {
-    fontFamily: Fonts.mono,
-    fontSize: 11,
-    fontWeight: '600',
-    color: Colors.textSecondary,
-    letterSpacing: 1,
+  countdownFill: {
+    height: '100%',
+    backgroundColor: Colors.accent,
+    borderRadius: 0,
   },
 });

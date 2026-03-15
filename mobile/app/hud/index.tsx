@@ -133,9 +133,6 @@ export default function HudScreen() {
           if (gesture.thumbs_up) {
             thumbsActedRef.current = true;
             handleScanConfirm(price);
-          } else if (gesture.thumbs_down) {
-            thumbsActedRef.current = true;
-            handleDismiss();
           }
         } else {
           if (gesture.palm_open && !gestureActiveRef.current) {
