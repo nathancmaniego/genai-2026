@@ -51,7 +51,6 @@ hands_detector = mp_vision.HandLandmarker.create_from_options(_landmarker_option
 FINGERTIP_IDS = [4, 8, 12, 16, 20]
 MCP_IDS = [2, 5, 9, 13, 17]
 
-DEBUG_LOG = Path("/Users/adamsaldanha/Desktop/genai-2026/.cursor/debug-8110b2.log")
 
 SYSTEM_PROMPT = """You are C.H.U.D — Continuous Heads-Up Display — a sharp, deadpan AI financial advisor 
 that lives inside a camera overlay. You analyze items people are looking at and deliver blunt, 
@@ -100,11 +99,6 @@ class InitializeRequest(BaseModel):
 
 @app.get("/")
 async def root():
-    import time
-    # #region agent log
-    _log = json.dumps({"sessionId":"8110b2","location":"main.py:root","message":"root_hit","data":{},"timestamp":int(time.time()*1000),"hypothesisId":"H2"})
-    with open(DEBUG_LOG, "a") as _f: _f.write(_log + "\n")
-    # #endregion
     return {"status": "online", "service": "C.H.U.D Brain v1.0"}
 
 
@@ -123,11 +117,6 @@ class GestureRequest(BaseModel):
 
 @app.post("/gesture")
 async def detect_gesture(req: GestureRequest):
-    import time
-    # #region agent log
-    _log0 = json.dumps({"sessionId":"8110b2","location":"main.py:gesture_entry","message":"gesture_request_received","data":{"image_len":len(req.image)},"timestamp":int(time.time()*1000),"hypothesisId":"H2"})
-    with open(DEBUG_LOG, "a") as _f: _f.write(_log0 + "\n")
-    # #endregion
     try:
         image_bytes = base64.b64decode(req.image)
     except Exception:
@@ -139,11 +128,6 @@ async def detect_gesture(req: GestureRequest):
 
     results = hands_detector.detect(mp_image)
 
-    # #region agent log
-    _log = json.dumps({"sessionId":"8110b2","location":"main.py:gesture","message":"gesture_detect","data":{"hands_found":len(results.hand_landmarks),"img_shape":list(np_image.shape)},"timestamp":int(time.time()*1000),"hypothesisId":"H1"})
-    with open(DEBUG_LOG, "a") as _f: _f.write(_log + "\n")
-    # #endregion
-
     if not results.hand_landmarks:
         return {"gesture": "none", "palm_open": False}
 
@@ -154,11 +138,6 @@ async def detect_gesture(req: GestureRequest):
     )
 
     palm_open = fingers_up >= 4
-
-    # #region agent log
-    _log2 = json.dumps({"sessionId":"8110b2","location":"main.py:gesture","message":"gesture_result","data":{"fingers_up":fingers_up,"palm_open":palm_open},"timestamp":int(time.time()*1000),"hypothesisId":"H1"})
-    with open(DEBUG_LOG, "a") as _f: _f.write(_log2 + "\n")
-    # #endregion
 
     return {
         "gesture": "open_palm" if palm_open else "fist",

@@ -1,5 +1,5 @@
 node_modules/
-venv/
+.venv/
 .expo/
 dist/
 __pycache__/
