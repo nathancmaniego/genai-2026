@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, useWindowDimensions } from 'react-native';
 import Animated, { FadeIn, FadeOut, SlideInRight } from 'react-native-reanimated';
 import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 
@@ -29,6 +29,8 @@ interface Props {
 }
 
 export default function ScanResultOverlay({ text, price, rating = 'okay', onConfirm, onDismiss }: Props) {
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
   const formatted = formatScanText(text);
   const hasPrice = price != null;
   const borderColor = RATING_BORDER[rating];
@@ -80,6 +82,10 @@ export default function ScanResultOverlay({ text, price, rating = 'okay', onConf
 
   const countdownProgress = hasPrice ? countdownLeft / CONFIRM_COUNTDOWN_MS : 1;
 
+  const lsBody = isLandscape ? { fontSize: 11, lineHeight: 17 } : undefined;
+  const lsConfirm = isLandscape ? { fontSize: 10, paddingVertical: 8 } : undefined;
+  const lsInner = isLandscape ? { padding: Spacing.md, paddingBottom: Spacing.sm, gap: Spacing.xs } : undefined;
+
   const cardContent = (
     <>
       <View style={styles.header}>
@@ -87,16 +93,16 @@ export default function ScanResultOverlay({ text, price, rating = 'okay', onConf
         <Text style={[styles.label, { color: borderColor }]}>SCAN</Text>
       </View>
 
-      <Text style={styles.body}>{formatted}</Text>
+      <Text style={[styles.body, lsBody]}>{formatted}</Text>
 
       {hasPrice ? (
         <>
           <View style={styles.confirmBar}>
             <Pressable
-              style={({ pressed }) => [styles.confirmBtnFull, pressed && styles.confirmBtnPressed]}
+              style={({ pressed }) => [styles.confirmBtnFull, lsConfirm, pressed && styles.confirmBtnPressed]}
               onPress={() => onConfirm(price)}
             >
-              <Text style={styles.confirmText}>confirm · ${price.toFixed(2)}</Text>
+              <Text style={[styles.confirmText, isLandscape && { fontSize: 9 }]}>confirm · ${price.toFixed(2)}</Text>
             </Pressable>
             <View style={styles.countdownTrack}>
               <View
@@ -112,11 +118,15 @@ export default function ScanResultOverlay({ text, price, rating = 'okay', onConf
     </>
   );
 
+  const wrapperStyle = isLandscape
+    ? [styles.wrapper, styles.wrapperLandscape, { left: width * 0.55 }]
+    : styles.wrapper;
+
   return (
     <Animated.View
       entering={FadeIn.duration(200)}
       exiting={FadeOut.duration(150)}
-      style={styles.wrapper}
+      style={wrapperStyle}
       pointerEvents="box-none"
     >
       <Animated.View
@@ -124,9 +134,9 @@ export default function ScanResultOverlay({ text, price, rating = 'okay', onConf
         style={styles.card}
       >
         {hasPrice ? (
-          <View style={[styles.cardInner, cardBorderStyle]}>{cardContent}</View>
+          <View style={[styles.cardInner, cardBorderStyle, lsInner]}>{cardContent}</View>
         ) : (
-          <Pressable style={[styles.cardInner, cardBorderStyle]} onPress={onDismiss}>
+          <Pressable style={[styles.cardInner, cardBorderStyle, lsInner]} onPress={onDismiss}>
             {cardContent}
           </Pressable>
         )}
@@ -143,6 +153,12 @@ const styles = StyleSheet.create({
     left: Spacing.xl,
     alignItems: 'stretch',
     zIndex: 100,
+  },
+  wrapperLandscape: {
+    bottom: 70,
+    top: Spacing.lg,
+    right: Spacing.lg,
+    justifyContent: 'center',
   },
   card: {
     width: '100%',
