@@ -1,4 +1,5 @@
 import io
+import logging
 import os
 import json
 import base64
@@ -20,6 +21,24 @@ from pydantic import BaseModel
 import google.generativeai as genai
 
 load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+try:
+    import railtownai
+    if os.getenv("RAILTOWN_API_KEY"):
+        railtownai.init(os.getenv("RAILTOWN_API_KEY"))
+except Exception:
+    railtownai = None
+
+
+def _breadcrumb(message: str, category: str = "default", data: dict | None = None):
+    if railtownai is not None:
+        try:
+            railtownai.add_breadcrumb(message, category=category, data=data or {})
+        except Exception:
+            pass
 
 app = FastAPI(title="C.H.U.D Brain", version="1.0.0")
 
@@ -153,6 +172,8 @@ async def detect_gesture(req: GestureRequest):
     )
 
     palm_open = fingers_up >= 4
+    if palm_open:
+        _breadcrumb("Palm detected", category="gesture")
 
     return {
         "gesture": "open_palm" if palm_open else "fist",
@@ -166,32 +187,43 @@ class ScanRequest(BaseModel):
 
 @app.post("/scan")
 async def scan_image(req: ScanRequest):
+    _breadcrumb("Scan request received", category="scan")
     if not os.getenv("GEMINI_API_KEY"):
         raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
 
     try:
         image_bytes = base64.b64decode(req.image)
     except Exception:
+        _breadcrumb("Scan failed", category="scan", data={"reason": "Invalid base64 image"})
         raise HTTPException(status_code=400, detail="Invalid base64 image")
 
     model = genai.GenerativeModel("gemini-2.5-flash")
+    _breadcrumb("Calling Gemini for product identification", category="scan")
 
-    response = model.generate_content(
-        [
-            "One short paragraph only. Identify the item, give one price (e.g. $X or $X–$Y), "
-            "one sentence on value, and 1–2 cheaper alternatives with prices. "
-            "Max 3–4 lines total. No bullet lists, no headers, no intro. Plain prose.",
-            {"mime_type": "image/jpeg", "data": image_bytes},
-        ]
-    )
-
-    result_text = response.text.strip()
-    print(f"[SCAN] Gemini response ({len(result_text)} chars):\n{result_text}\n---")
-    return {"text": result_text}
+    try:
+        response = model.generate_content(
+            [
+                "One short paragraph only. Identify the item, give one price (e.g. $X or $X–$Y), "
+                "one sentence on value, and 1–2 cheaper alternatives with prices. "
+                "Max 3–4 lines total. No bullet lists, no headers, no intro. Plain prose.",
+                {"mime_type": "image/jpeg", "data": image_bytes},
+            ]
+        )
+        result_text = response.text.strip()
+        logger.info(
+            "Scan completed",
+            extra={"endpoint": "scan", "response_length": len(result_text)},
+        )
+        return {"text": result_text}
+    except Exception:
+        _breadcrumb("Scan failed", category="scan", data={"reason": "Gemini call or response"})
+        logger.exception("Scan failed")
+        raise
 
 
 @app.post("/analyze")
 async def analyze_frame(req: AnalyzeRequest):
+    _breadcrumb("Analyze request received", category="analyze")
     if not os.getenv("GEMINI_API_KEY"):
         raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
 
@@ -209,6 +241,7 @@ async def analyze_frame(req: AnalyzeRequest):
     )
 
     model = genai.GenerativeModel("google/gemma-3-1b-it")
+    _breadcrumb("Calling Gemini for affordability analysis", category="analyze")
 
     response = model.generate_content(
         [
@@ -227,6 +260,8 @@ async def analyze_frame(req: AnalyzeRequest):
             text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
         ai_result = json.loads(text)
     except (json.JSONDecodeError, IndexError):
+        _breadcrumb("Analyze failed", category="analyze", data={"reason": "JSON parse failure"})
+        logger.exception("Failed to parse AI response")
         raise HTTPException(status_code=500, detail=f"Failed to parse AI response: {response.text}")
 
     item_name = ai_result.get("item", "Unknown Item")
@@ -257,7 +292,10 @@ async def analyze_frame(req: AnalyzeRequest):
         pass
 
     log_scan(item_name, estimated_price, can_afford, severity, voice_line)
-
+    logger.info(
+        "Analyze completed",
+        extra={"endpoint": "analyze", "item": item_name, "severity": severity},
+    )
     return {
         "item": item_name,
         "estimatedPrice": estimated_price,
@@ -274,8 +312,10 @@ async def analyze_frame(req: AnalyzeRequest):
 async def generate_voice(text: str) -> str | None:
     api_key = os.getenv("ELEVENLABS_API_KEY")
     if not api_key:
+        logger.warning("ELEVENLABS_API_KEY not set; skipping voice generation")
         return None
 
+    _breadcrumb("Calling ElevenLabs for TTS", category="voice")
     from elevenlabs import ElevenLabs
 
     client = ElevenLabs(api_key=api_key)
@@ -311,6 +351,7 @@ def log_scan(
     severity: str,
     voice_line: str,
 ):
+    _breadcrumb("Scan logged", category="scan_log", data={"item": item, "severity": severity})
     try:
         logs = json.loads(SCAN_LOG_PATH.read_text())
     except (json.JSONDecodeError, FileNotFoundError):
