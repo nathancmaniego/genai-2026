@@ -14,6 +14,7 @@ export default function MoneyScreen() {
   const [income, setIncome] = useState('');
   const [savings, setSavings] = useState('');
   const [flexible, setFlexible] = useState('');
+  const [discretionary, setDiscretionary] = useState('');
 
   const canContinue =
     !!income && parseFloat(income) > 0 &&
@@ -25,6 +26,7 @@ export default function MoneyScreen() {
       monthlyIncome: parseFloat(income),
       monthlySavingsGoal: parseFloat(savings),
       monthlyFlexibleSpending: parseFloat(flexible),
+      monthlyDiscretionaryBudget: discretionary ? parseFloat(discretionary) : 0,
     });
     router.push('/onboarding/savings-goal');
   };
@@ -67,6 +69,16 @@ export default function MoneyScreen() {
             value={flexible}
             onChangeText={setFlexible}
             placeholder="300"
+          />
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.duration(400).delay(600)}>
+          <CurrencyInputField
+            label="How much do you set aside monthly for bigger purchases?"
+            helper="Optional — for electronics, luxury items, and one-off buys."
+            value={discretionary}
+            onChangeText={setDiscretionary}
+            placeholder="200"
           />
         </Animated.View>
       </StepContainer>

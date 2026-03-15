@@ -4,6 +4,7 @@ import {
   getBudgetProfile,
   saveBudgetProfile,
   updateBalance as updateStoredBalance,
+  updateDiscretionaryBalance as updateStoredDiscretionaryBalance,
   resetOnboarding,
 } from '@/services/storage';
 
@@ -12,7 +13,9 @@ interface BudgetContextType {
   loading: boolean;
   setProfile: (profile: BudgetProfile) => Promise<void>;
   deductFromBalance: (amount: number) => Promise<void>;
+  deductFromDiscretionary: (amount: number) => Promise<void>;
   resetBalance: () => Promise<void>;
+  resetDiscretionaryBalance: () => Promise<void>;
   clearProfile: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -22,7 +25,9 @@ const BudgetContext = createContext<BudgetContextType>({
   loading: true,
   setProfile: async () => {},
   deductFromBalance: async () => {},
+  deductFromDiscretionary: async () => {},
   resetBalance: async () => {},
+  resetDiscretionaryBalance: async () => {},
   clearProfile: async () => {},
   refreshProfile: async () => {},
 });
@@ -56,11 +61,29 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
     [profile]
   );
 
+  const deductFromDiscretionary = useCallback(
+    async (amount: number) => {
+      if (!profile) return;
+      const newBalance = Math.max(0, profile.discretionaryBalance - amount);
+      await updateStoredDiscretionaryBalance(newBalance);
+      setProfileState((prev) => (prev ? { ...prev, discretionaryBalance: newBalance } : null));
+    },
+    [profile]
+  );
+
   const resetBalance = useCallback(async () => {
     if (!profile) return;
     await updateStoredBalance(profile.dailyFunBudget);
     setProfileState((prev) =>
       prev ? { ...prev, currentBalance: prev.dailyFunBudget } : null
+    );
+  }, [profile]);
+
+  const resetDiscretionaryBalance = useCallback(async () => {
+    if (!profile) return;
+    await updateStoredDiscretionaryBalance(profile.monthlyDiscretionaryBudget);
+    setProfileState((prev) =>
+      prev ? { ...prev, discretionaryBalance: prev.monthlyDiscretionaryBudget } : null
     );
   }, [profile]);
 
@@ -76,7 +99,9 @@ export function BudgetProvider({ children }: { children: React.ReactNode }) {
         loading,
         setProfile,
         deductFromBalance,
+        deductFromDiscretionary,
         resetBalance,
+        resetDiscretionaryBalance,
         clearProfile,
         refreshProfile,
       }}

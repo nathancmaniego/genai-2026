@@ -227,6 +227,7 @@ class ScanCalibration(BaseModel):
     monthlyIncome: float = 0
     monthlySavingsGoal: float = 0
     monthlyFlexibleSpending: float = 0
+    monthlyDiscretionaryBudget: float = 0
     primarySavingsGoal: str = ""
     impulseFrequency: int = -1
     smallPurchaseCreep: int = -1
@@ -270,6 +271,11 @@ def _build_scan_calibration_context(calibration: ScanCalibration | None) -> str:
         details.append(
             f"Daily budget for essential / day-to-day purchases (e.g. food, coffee, small daily items): ~${daily_budget:.2f} per day."
         )
+    if calibration.monthlyDiscretionaryBudget > 0:
+        details.append(
+            f"Monthly budget for non-essential / discretionary purchases (e.g. electronics, luxury, one-off bigger buys): ${calibration.monthlyDiscretionaryBudget:.2f} per month."
+        )
+    elif calibration.monthlyFlexibleSpending > 0:
         details.append(
             f"Monthly budget for non-essential / discretionary purchases (e.g. electronics, luxury, one-off bigger buys): ${calibration.monthlyFlexibleSpending:.2f} per month."
         )
@@ -322,11 +328,29 @@ async def scan_image(request: Request, req: ScanRequest):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid base64 image")
 
+    image = Image.open(io.BytesIO(image_bytes))
+    w, h = image.size
+    crop_ratio = 0.6
+    cx, cy = w / 2, h / 2
+    cw, ch = w * crop_ratio, h * crop_ratio
+    cropped = image.crop((
+        int(cx - cw / 2),
+        int(cy - ch / 2),
+        int(cx + cw / 2),
+        int(cy + ch / 2),
+    ))
+    buf = io.BytesIO()
+    cropped.save(buf, format="JPEG", quality=80)
+    cropped_bytes = buf.getvalue()
+
     calibration_context = _build_scan_calibration_context(req.calibration)
     model = genai.GenerativeModel("gemini-2.5-flash")
     logger.info("Gemini scan request")
     response = model.generate_content(
         [
+            "IMPORTANT: The image has been cropped to the center of the camera frame. "
+            "Focus ONLY on the main product or item visible in the center of this image. "
+            "Ignore any background items, shelves, or peripheral objects.\n\n"
             "Analyze this image and respond with ONLY a valid JSON object (no markdown, no code fences):\n"
             '{\n'
             '  "text": "One short paragraph. Identify the item, mention its price, '
@@ -334,7 +358,8 @@ async def scan_image(request: Request, req: ScanRequest):
             'and include 1-2 cheaper alternatives with prices when they are genuinely helpful. '
             'Max 3-4 lines. Plain prose, no bullet lists, no headers.",\n'
             '  "estimated_price": 29.99,\n'
-            '  "rating": "good"\n'
+            '  "rating": "good",\n'
+            '  "purchase_type": "daily"\n'
             '}\n\n'
             "User calibration for personalization:\n"
             f"{calibration_context}\n\n"
@@ -349,17 +374,18 @@ async def scan_image(request: Request, req: ScanRequest):
             "- If you can confidently identify the item and estimate its retail price, use that.\n"
             "- If you cannot determine a specific price, set estimated_price to null.\n"
             "- Always round to 2 decimal places when providing a price.\n\n"
-            'Rules for rating (required, exactly one of these three strings):\n'
-            '1. First classify the purchase type:\n'
-            '- Daily/essential: food, coffee, groceries, routine small necessities, things people buy often within a day (compare against the DAILY budget).\n'
-            '- Non-essential/larger: electronics, luxury items, one-off bigger purchases, non-essential wants e.g. a PS5 controller (compare against the MONTHLY discretionary budget).\n'
-            '2. Then rate using the right budget:\n'
-            '- For daily/essential items: does the price fit sensibly within the user\'s daily budget for such items? Rate "bad" if it blows the day, "okay" if borderline, "good" if it fits.\n'
-            '- For non-essential items: does the price fit within the user\'s monthly budget for discretionary spending? Rate "bad" if it strains the month or is clearly impulsive, "okay" if borderline, "good" if it fits.\n'
-            '- "bad": Poor fit—over the relevant budget (daily or monthly), conflicts with goals/triggers, or clearly impulsive.\n'
+            'Rules for purchase_type (required, exactly one of "daily" or "discretionary"):\n'
+            '- "daily": food, coffee, groceries, routine small necessities, things people buy often within a day.\n'
+            '- "discretionary": electronics, luxury items, one-off bigger purchases, non-essential wants e.g. a PS5 controller.\n\n'
+            'Rules for rating (required, exactly one of "bad", "okay", or "good"):\n'
+            '1. Use the purchase_type you chose above to pick the right budget:\n'
+            '- For "daily" items: compare against the user\'s DAILY budget. Rate "bad" if it blows the day, "okay" if borderline, "good" if it fits.\n'
+            '- For "discretionary" items: compare against the user\'s MONTHLY discretionary budget. Rate "bad" if it strains the month or is clearly impulsive, "okay" if borderline, "good" if it fits.\n'
+            '2. Rating meanings:\n'
+            '- "bad": Poor fit—over the relevant budget, conflicts with goals/triggers, or clearly impulsive.\n'
             '- "okay": Borderline—acceptable but not ideal for the relevant budget.\n'
-            '- "good": Fits—aligned with the relevant budget and the user\'s profile. Output only "bad", "okay", or "good".',
-            {"mime_type": "image/jpeg", "data": image_bytes},
+            '- "good": Fits—aligned with the relevant budget and the user\'s profile.',
+            {"mime_type": "image/jpeg", "data": cropped_bytes},
         ]
     )
 
@@ -370,7 +396,7 @@ async def scan_image(request: Request, req: ScanRequest):
         scan_result = json.loads(raw)
     except (json.JSONDecodeError, IndexError):
         logger.warning("Gemini scan: failed to parse JSON, using raw text")
-        return {"text": response.text.strip(), "estimated_price": None, "rating": "okay"}
+        return {"text": response.text.strip(), "estimated_price": None, "rating": "okay", "purchase_type": "daily"}
 
     result_text = scan_result.get("text", response.text.strip())
     estimated_price = scan_result.get("estimated_price")
@@ -383,8 +409,11 @@ async def scan_image(request: Request, req: ScanRequest):
     raw_rating = (scan_result.get("rating") or "okay").strip().lower()
     rating = raw_rating if raw_rating in ("bad", "okay", "good") else "okay"
 
-    logger.info("Gemini scan ok", extra={"response_length": len(result_text), "estimated_price": estimated_price, "rating": rating})
-    return {"text": result_text, "estimated_price": estimated_price, "rating": rating}
+    raw_purchase_type = (scan_result.get("purchase_type") or "daily").strip().lower()
+    purchase_type = raw_purchase_type if raw_purchase_type in ("daily", "discretionary") else "daily"
+
+    logger.info("Gemini scan ok", extra={"response_length": len(result_text), "estimated_price": estimated_price, "rating": rating, "purchase_type": purchase_type})
+    return {"text": result_text, "estimated_price": estimated_price, "rating": rating, "purchase_type": purchase_type}
 
 
 @app.post("/analyze")

@@ -77,11 +77,13 @@ export async function detectGesture(
 }
 
 export type ScanRating = 'bad' | 'okay' | 'good';
+export type PurchaseType = 'daily' | 'discretionary';
 
 export interface ScanResponse {
   text: string;
   estimatedPrice: number | null;
   rating: ScanRating;
+  purchaseType: PurchaseType;
 }
 
 export async function scanImage(
@@ -101,10 +103,14 @@ export async function scanImage(
   const rawRating = data?.rating?.toLowerCase?.();
   const rating: ScanRating =
     rawRating === 'bad' || rawRating === 'okay' || rawRating === 'good' ? rawRating : 'okay';
+  const rawPurchaseType = data?.purchase_type?.toLowerCase?.();
+  const purchaseType: PurchaseType =
+    rawPurchaseType === 'discretionary' ? 'discretionary' : 'daily';
   return {
     text: (data?.text != null) ? String(data.text) : '',
     estimatedPrice: data?.estimated_price ?? null,
     rating,
+    purchaseType,
   };
 }
 

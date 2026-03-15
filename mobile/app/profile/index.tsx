@@ -31,12 +31,13 @@ import {
 export default function ProfileScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { profile, setProfile, resetBalance, clearProfile } = useBudget();
+  const { profile, setProfile, resetBalance, resetDiscretionaryBalance, clearProfile } = useBudget();
 
   const [editing, setEditing] = useState(false);
   const [income, setIncome] = useState('');
   const [costs, setCosts] = useState('');
   const [savings, setSavings] = useState('');
+  const [discretionary, setDiscretionary] = useState('');
   const [serverUrl, setServerUrl] = useState('');
   const [serverSaved, setServerSaved] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -54,6 +55,7 @@ export default function ProfileScreen() {
       setIncome(String(profile.monthlyIncome));
       setCosts(String(profile.fixedCosts));
       setSavings(String(profile.savingsGoal));
+      setDiscretionary(String(profile.monthlyDiscretionaryBudget ?? 0));
     }
     getApiUrl().then((url) => {
       if (url) {
@@ -110,6 +112,7 @@ export default function ProfileScreen() {
     const inc = parseFloat(income) || 0;
     const cos = parseFloat(costs) || 0;
     const sav = parseFloat(savings) || 0;
+    const disc = parseFloat(discretionary) || 0;
     const daily = calculateDailyFunBudget(inc, cos, sav);
 
     await setProfile({
@@ -118,6 +121,8 @@ export default function ProfileScreen() {
       savingsGoal: sav,
       dailyFunBudget: daily,
       currentBalance: daily,
+      monthlyDiscretionaryBudget: disc,
+      discretionaryBalance: disc,
     });
     setEditing(false);
   };
@@ -139,6 +144,17 @@ export default function ProfileScreen() {
       [
         { text: 'cancel', style: 'cancel' },
         { text: 'reset', style: 'destructive', onPress: resetBalance },
+      ]
+    );
+  };
+
+  const handleResetDiscretionary = () => {
+    Alert.alert(
+      'reset discretionary',
+      `Reset to monthly discretionary budget of $${(profile?.monthlyDiscretionaryBudget ?? 0).toFixed(2)}?`,
+      [
+        { text: 'cancel', style: 'cancel' },
+        { text: 'reset', style: 'destructive', onPress: resetDiscretionaryBalance },
       ]
     );
   };
@@ -187,15 +203,28 @@ export default function ProfileScreen() {
       >
         {/* Balance Card */}
         <Animated.View entering={FadeInDown.duration(400).delay(100)} style={styles.balanceCard}>
-          <Text style={styles.balanceLabel}>CURRENT BALANCE</Text>
+          <Text style={styles.balanceLabel}>DAILY BALANCE</Text>
           <Text style={styles.balanceAmount}>${profile.currentBalance.toFixed(2)}</Text>
           <Text style={styles.balanceSub}>
             of ${profile.dailyFunBudget.toFixed(2)} daily budget
           </Text>
           <Pressable style={styles.resetBalanceBtn} onPress={handleResetBalance}>
-            <Text style={styles.resetBalanceText}>reset balance</Text>
+            <Text style={styles.resetBalanceText}>reset daily</Text>
           </Pressable>
         </Animated.View>
+
+        {(profile.monthlyDiscretionaryBudget ?? 0) > 0 && (
+          <Animated.View entering={FadeInDown.duration(400).delay(150)} style={styles.balanceCard}>
+            <Text style={styles.balanceLabel}>DISCRETIONARY BALANCE</Text>
+            <Text style={styles.balanceAmount}>${(profile.discretionaryBalance ?? 0).toFixed(2)}</Text>
+            <Text style={styles.balanceSub}>
+              of ${(profile.monthlyDiscretionaryBudget ?? 0).toFixed(2)} monthly discretionary
+            </Text>
+            <Pressable style={styles.resetBalanceBtn} onPress={handleResetDiscretionary}>
+              <Text style={styles.resetBalanceText}>reset discretionary</Text>
+            </Pressable>
+          </Animated.View>
+        )}
 
         {/* Budget Breakdown */}
         <Animated.View entering={FadeInDown.duration(400).delay(200)} style={styles.section}>
@@ -215,6 +244,8 @@ export default function ProfileScreen() {
               <EditRow label="fixed costs" value={costs} onChangeText={setCosts} />
               <View style={styles.rule} />
               <EditRow label="savings" value={savings} onChangeText={setSavings} />
+              <View style={styles.rule} />
+              <EditRow label="discretionary" value={discretionary} onChangeText={setDiscretionary} />
               <View style={styles.ruleBold} />
               <View style={styles.previewRow}>
                 <Text style={styles.previewLabel}>new daily budget</Text>
@@ -229,6 +260,7 @@ export default function ProfileScreen() {
                     setIncome(String(profile.monthlyIncome));
                     setCosts(String(profile.fixedCosts));
                     setSavings(String(profile.savingsGoal));
+                    setDiscretionary(String(profile.monthlyDiscretionaryBudget ?? 0));
                   }}
                 >
                   <Text style={styles.cancelText}>cancel</Text>
@@ -255,6 +287,17 @@ export default function ProfileScreen() {
                 sign="="
                 accent
               />
+              {(profile.monthlyDiscretionaryBudget ?? 0) > 0 && (
+                <>
+                  <View style={styles.rule} />
+                  <LedgerRow
+                    label="discretionary"
+                    value={profile.monthlyDiscretionaryBudget}
+                    sign="$"
+                    accent
+                  />
+                </>
+              )}
             </View>
           )}
         </Animated.View>

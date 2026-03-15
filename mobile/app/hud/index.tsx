@@ -21,7 +21,7 @@ const GESTURE_POLL_MS = 1500;
 export default function HudScreen() {
   const cameraRef = useRef<CameraView>(null);
   const [permission, requestPermission] = useCameraPermissions();
-  const { profile, deductFromBalance } = useBudget();
+  const { profile, deductFromBalance, deductFromDiscretionary } = useBudget();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -104,10 +104,14 @@ export default function HudScreen() {
   }, [result, deductFromBalance]);
 
   const handleScanConfirm = useCallback((price: number) => {
-    deductFromBalance(price);
+    if (scanResultRef.current?.purchaseType === 'discretionary') {
+      deductFromDiscretionary(price);
+    } else {
+      deductFromBalance(price);
+    }
     gestureActiveRef.current = false;
     setScanResult(null);
-  }, [deductFromBalance]);
+  }, [deductFromBalance, deductFromDiscretionary]);
 
   const thumbsActedRef = useRef(false);
 
@@ -215,6 +219,8 @@ export default function HudScreen() {
           <BudgetTicker
             currentBalance={profile.currentBalance}
             dailyBudget={profile.dailyFunBudget}
+            discretionaryBalance={profile.discretionaryBalance ?? 0}
+            discretionaryBudget={profile.monthlyDiscretionaryBudget ?? 0}
           />
         )}
 

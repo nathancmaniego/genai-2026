@@ -14,6 +14,8 @@ export interface BudgetProfile {
   savingsGoal: number;
   dailyFunBudget: number;
   currentBalance: number;
+  monthlyDiscretionaryBudget: number;
+  discretionaryBalance: number;
 }
 
 export function calculateDailyFunBudget(
@@ -57,6 +59,14 @@ export async function updateBalance(newBalance: number): Promise<void> {
   const profile = await getBudgetProfile();
   if (profile) {
     profile.currentBalance = newBalance;
+    await AsyncStorage.setItem(KEYS.BUDGET, JSON.stringify(profile));
+  }
+}
+
+export async function updateDiscretionaryBalance(newBalance: number): Promise<void> {
+  const profile = await getBudgetProfile();
+  if (profile) {
+    profile.discretionaryBalance = newBalance;
     await AsyncStorage.setItem(KEYS.BUDGET, JSON.stringify(profile));
   }
 }

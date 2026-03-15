@@ -5,26 +5,46 @@ import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 interface Props {
   currentBalance: number;
   dailyBudget: number;
+  discretionaryBalance: number;
+  discretionaryBudget: number;
 }
 
-export default function BudgetTicker({ currentBalance, dailyBudget }: Props) {
+function dotColor(ratio: number) {
+  return ratio > 0.5 ? Colors.white : ratio > 0.2 ? Colors.textSecondary : Colors.red;
+}
+
+export default function BudgetTicker({ currentBalance, dailyBudget, discretionaryBalance, discretionaryBudget }: Props) {
   const ratio = dailyBudget > 0 ? currentBalance / dailyBudget : 0;
-  const dot = ratio > 0.5 ? Colors.white : ratio > 0.2 ? Colors.textSecondary : Colors.red;
+  const discRatio = discretionaryBudget > 0 ? discretionaryBalance / discretionaryBudget : 0;
+  const showDisc = discretionaryBudget > 0;
 
   return (
     <Animated.View entering={FadeIn.duration(500)} style={styles.container}>
       <View style={styles.inner}>
-        <View style={styles.left}>
-          <View style={[styles.dot, { backgroundColor: dot }]} />
+        <View style={styles.section}>
+          <View style={[styles.dot, { backgroundColor: dotColor(ratio) }]} />
           <Text style={styles.label}>BAL</Text>
-        </View>
-        <View style={styles.right}>
           <Text style={[styles.amount, ratio <= 0.2 && { color: Colors.red }]}>
             ${currentBalance.toFixed(2)}
           </Text>
           <Text style={styles.sep}>/</Text>
           <Text style={styles.total}>${dailyBudget.toFixed(2)}</Text>
         </View>
+
+        {showDisc && (
+          <>
+            <View style={styles.divider} />
+            <View style={styles.section}>
+              <View style={[styles.dot, { backgroundColor: dotColor(discRatio) }]} />
+              <Text style={styles.label}>DISC</Text>
+              <Text style={[styles.amount, discRatio <= 0.2 && { color: Colors.red }]}>
+                ${discretionaryBalance.toFixed(2)}
+              </Text>
+              <Text style={styles.sep}>/</Text>
+              <Text style={styles.total}>${discretionaryBudget.toFixed(2)}</Text>
+            </View>
+          </>
+        )}
       </View>
     </Animated.View>
   );
@@ -40,50 +60,55 @@ const styles = StyleSheet.create({
   inner: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.08)',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm + 2,
+    paddingVertical: Spacing.sm,
     ...superellipse(Radii.md),
   },
-  left: {
+  section: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
+    gap: 4,
+  },
+  divider: {
+    width: 1,
+    height: 16,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    marginHorizontal: 8,
   },
   dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
   },
   label: {
     fontFamily: Fonts.mono,
-    fontSize: 10,
+    fontSize: 8,
     fontWeight: '700',
     color: Colors.textMuted,
-    letterSpacing: 2,
-  },
-  right: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
+    letterSpacing: 1.5,
+    marginRight: 2,
   },
   amount: {
     fontFamily: Fonts.mono,
-    fontSize: 20,
+    fontSize: 13,
     fontWeight: '700',
     color: Colors.white,
   },
   sep: {
     fontFamily: Fonts.mono,
-    fontSize: 14,
+    fontSize: 10,
     color: Colors.textMuted,
-    marginHorizontal: 2,
+    marginHorizontal: 1,
   },
   total: {
     fontFamily: Fonts.mono,
-    fontSize: 13,
+    fontSize: 10,
     color: Colors.textMuted,
     fontWeight: '500',
   },

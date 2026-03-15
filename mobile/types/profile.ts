@@ -4,6 +4,7 @@ export interface UserProfile {
   monthlyIncome: number;
   monthlySavingsGoal: number;
   monthlyFlexibleSpending: number;
+  monthlyDiscretionaryBudget: number;
   primarySavingsGoal: string;
   impulseFrequency: number;
   smallPurchaseCreep: number;
@@ -20,6 +21,7 @@ export const DEFAULT_USER_PROFILE: UserProfile = {
   monthlyIncome: 0,
   monthlySavingsGoal: 0,
   monthlyFlexibleSpending: 0,
+  monthlyDiscretionaryBudget: 0,
   primarySavingsGoal: '',
   impulseFrequency: -1,
   smallPurchaseCreep: -1,
@@ -46,5 +48,7 @@ export function buildBudgetProfile(p: UserProfile): BudgetProfile {
     savingsGoal: p.monthlySavingsGoal,
     dailyFunBudget,
     currentBalance: dailyFunBudget,
+    monthlyDiscretionaryBudget: p.monthlyDiscretionaryBudget,
+    discretionaryBalance: p.monthlyDiscretionaryBudget,
   };
 }
