@@ -28,10 +28,11 @@ interface Props {
   onDismiss: () => void;
 }
 
-export default function ScanResultOverlay({ text, price, rating, onConfirm, onDismiss }: Props) {
+export default function ScanResultOverlay({ text, price, rating = 'okay', onConfirm, onDismiss }: Props) {
   const formatted = formatScanText(text);
   const hasPrice = price != null;
   const borderColor = RATING_BORDER[rating];
+  const cardBorderStyle = { borderColor, borderWidth: 2 };
 
   const [countdownLeft, setCountdownLeft] = useState(hasPrice ? CONFIRM_COUNTDOWN_MS : 0);
 
@@ -123,9 +124,9 @@ export default function ScanResultOverlay({ text, price, rating, onConfirm, onDi
         style={styles.card}
       >
         {hasPrice ? (
-          <View style={[styles.cardInner, { borderColor }]}>{cardContent}</View>
+          <View style={[styles.cardInner, cardBorderStyle]}>{cardContent}</View>
         ) : (
-          <Pressable style={[styles.cardInner, { borderColor }]} onPress={onDismiss}>
+          <Pressable style={[styles.cardInner, cardBorderStyle]} onPress={onDismiss}>
             {cardContent}
           </Pressable>
         )}
@@ -150,11 +151,11 @@ const styles = StyleSheet.create({
   },
   cardInner: {
     backgroundColor: 'rgba(10, 10, 10, 0.85)',
-    borderWidth: 1,
-    borderColor: 'rgba(92, 224, 210, 0.25)',
     padding: Spacing.lg,
     paddingBottom: Spacing.md,
     gap: Spacing.sm,
+    borderWidth: 2,
+    borderColor: 'rgba(92, 224, 210, 0.25)',
     ...superellipse(Radii.lg),
   },
   header: {

@@ -5,6 +5,7 @@ dist/
 __pycache__/
 *.pyc
 .env
+.env.example
 audio_cache/
 scan_log.json
 *.mp3
