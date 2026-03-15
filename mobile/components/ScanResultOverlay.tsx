@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, useWindowDimensions } from 'react-native';
 import Animated, { FadeIn, FadeOut, SlideInRight } from 'react-native-reanimated';
 import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
+import type { PurchaseType } from '@/services/api';
 
 const AUTO_DISMISS_MS = 12000;
 const CONFIRM_COUNTDOWN_MS = 10000;
@@ -24,17 +25,26 @@ interface Props {
   text: string;
   price: number | null;
   rating: 'bad' | 'okay' | 'good';
+  purchaseType: PurchaseType;
   onConfirm: (price: number) => void;
   onDismiss: () => void;
 }
 
-export default function ScanResultOverlay({ text, price, rating = 'okay', onConfirm, onDismiss }: Props) {
+export default function ScanResultOverlay({
+  text,
+  price,
+  rating = 'okay',
+  purchaseType,
+  onConfirm,
+  onDismiss,
+}: Props) {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
   const formatted = formatScanText(text);
   const hasPrice = price != null;
   const borderColor = RATING_BORDER[rating];
   const cardBorderStyle = { borderColor, borderWidth: 2 };
+  const purchaseLabel = purchaseType === 'discretionary' ? 'DISCRETIONARY' : 'DAILY';
 
   const [countdownLeft, setCountdownLeft] = useState(hasPrice ? CONFIRM_COUNTDOWN_MS : 0);
 
@@ -91,6 +101,9 @@ export default function ScanResultOverlay({ text, price, rating = 'okay', onConf
       <View style={styles.header}>
         <View style={[styles.dot, { backgroundColor: borderColor }]} />
         <Text style={[styles.label, { color: borderColor }]}>SCAN</Text>
+        <View style={styles.pill}>
+          <Text style={styles.pillText}>{purchaseLabel}</Text>
+        </View>
       </View>
 
       <Text style={[styles.body, lsBody]}>{formatted}</Text>
@@ -191,6 +204,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.accent,
     letterSpacing: 2,
+  },
+  pill: {
+    marginLeft: 'auto',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
+  },
+  pillText: {
+    fontFamily: Fonts.mono,
+    fontSize: 9,
+    color: Colors.textMuted,
+    letterSpacing: 1.2,
   },
   body: {
     fontFamily: Fonts.mono,

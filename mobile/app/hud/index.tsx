@@ -229,6 +229,7 @@ export default function HudScreen() {
             text={scanResult.text}
             price={scanResult.estimatedPrice}
             rating={scanResult.rating}
+            purchaseType={scanResult.purchaseType}
             onConfirm={handleScanConfirm}
             onDismiss={handleDismiss}
           />

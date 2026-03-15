@@ -46,6 +46,9 @@ export default function BudgetTicker({ currentBalance, dailyBudget, discretionar
           </>
         )}
       </View>
+      <View style={styles.legendRow}>
+        <Text style={styles.legendText}>BAL = daily · DISC = discretionary</Text>
+      </View>
     </Animated.View>
   );
 }
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
     bottom: 24,
     left: Spacing.lg,
     right: Spacing.lg,
+    gap: 4,
   },
   inner: {
     flexDirection: 'row',
@@ -111,5 +115,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: Colors.textMuted,
     fontWeight: '500',
+  },
+  legendRow: {
+    alignItems: 'center',
+  },
+  legendText: {
+    fontFamily: Fonts.mono,
+    fontSize: 9,
+    color: Colors.textMuted,
+    letterSpacing: 1,
   },
 });
