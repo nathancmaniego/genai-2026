@@ -69,7 +69,7 @@ export default function PersonalizeScreen() {
           <ChipSelector
             options={WARNING_OPTIONS}
             selected={warning}
-            onToggle={(o) => setWarning([o])}
+            onToggle={(o) => setWarning((prev) => (prev.includes(o) ? [] : [o]))}
             maxSelect={1}
           />
         </Animated.View>
@@ -92,7 +92,7 @@ export default function PersonalizeScreen() {
           <ChipSelector
             options={TONE_OPTIONS}
             selected={tone}
-            onToggle={(o) => setTone([o])}
+            onToggle={(o) => setTone((prev) => (prev.includes(o) ? [] : [o]))}
             maxSelect={1}
           />
         </Animated.View>
@@ -103,7 +103,7 @@ export default function PersonalizeScreen() {
           <ChipSelector
             options={INTERVENTION_OPTIONS}
             selected={intervention}
-            onToggle={(o) => setIntervention([o])}
+            onToggle={(o) => setIntervention((prev) => (prev.includes(o) ? [] : [o]))}
             maxSelect={1}
           />
         </Animated.View>

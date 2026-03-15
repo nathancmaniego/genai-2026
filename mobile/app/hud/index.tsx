@@ -5,7 +5,7 @@ import { Audio } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { useBudget } from '@/context/BudgetContext';
 import { analyzeFrame, AnalyzeResponse, ScanResponse, setApiBaseUrl, detectGesture, scanImage } from '@/services/api';
-import { getApiUrl } from '@/services/storage';
+import { getApiUrl, getUserProfile } from '@/services/storage';
 import Reticle from '@/components/Reticle';
 import ScanningBar from '@/components/ScanningBar';
 import BudgetTicker from '@/components/BudgetTicker';
@@ -77,7 +77,8 @@ export default function HudScreen() {
       const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
       if (!photo?.base64) throw new Error('Failed to capture frame');
 
-      const scan = await scanImage(photo.base64);
+      const calibration = await getUserProfile();
+      const scan = await scanImage(photo.base64, calibration);
       setScanResult(scan);
     } catch (err: any) {
       Alert.alert('scan failed', err.message || 'Could not analyze the frame.');

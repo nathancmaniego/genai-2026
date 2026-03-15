@@ -1,4 +1,5 @@
 import { BudgetProfile } from './storage';
+import type { UserProfile } from '@/types/profile';
 
 const BASE_URL = 'http://localhost:8000';
 
@@ -81,12 +82,16 @@ export interface ScanResponse {
 }
 
 export async function scanImage(
-  base64Image: string
+  base64Image: string,
+  calibration?: UserProfile | null,
 ): Promise<ScanResponse> {
   const res = await fetch(`${apiBaseUrl}/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ image: base64Image }),
+    body: JSON.stringify({
+      image: base64Image,
+      calibration: calibration ?? undefined,
+    }),
   });
   if (!res.ok) throw new Error(`Scan error: ${res.status}`);
   const data = await res.json();

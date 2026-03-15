@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 import google.generativeai as genai
 
@@ -223,8 +223,88 @@ async def detect_gesture(req: GestureRequest):
     }
 
 
+class ScanCalibration(BaseModel):
+    monthlyIncome: float = 0
+    monthlySavingsGoal: float = 0
+    monthlyFlexibleSpending: float = 0
+    primarySavingsGoal: str = ""
+    impulseFrequency: int = -1
+    smallPurchaseCreep: int = -1
+    budgetAwareness: int = -1
+    overspendingTriggers: list[str] = Field(default_factory=list)
+    impulseCategories: list[str] = Field(default_factory=list)
+    preferredWarningType: str = ""
+    riskAlertLikelihood: int = -1
+    chudTone: str = ""
+    interventionPreference: str = ""
+
+
 class ScanRequest(BaseModel):
     image: str
+    calibration: ScanCalibration | None = None
+
+
+FREQUENCY_LABELS = ["Never", "Rarely", "Sometimes", "Often", "Very often"]
+AWARENESS_LABELS = ["Not at all", "A little", "Somewhat", "Mostly", "Very aware"]
+LIKELIHOOD_LABELS = ["Very unlikely", "Unlikely", "Neutral", "Likely", "Very likely"]
+
+
+def _label_for_index(value: int, labels: list[str]) -> str | None:
+    if 0 <= value < len(labels):
+        return labels[value]
+    return None
+
+
+def _join_values(values: list[str]) -> str:
+    return ", ".join(values)
+
+
+def _build_scan_calibration_context(calibration: ScanCalibration | None) -> str:
+    if calibration is None:
+        return "No user calibration was provided."
+
+    details: list[str] = []
+
+    if calibration.primarySavingsGoal:
+        details.append(f"Primary savings goal: {calibration.primarySavingsGoal}.")
+    if calibration.monthlySavingsGoal > 0:
+        details.append(f"Monthly savings target: ${calibration.monthlySavingsGoal:.2f}.")
+    if calibration.monthlyFlexibleSpending > 0:
+        details.append(
+            f"Monthly flexible spending target: ${calibration.monthlyFlexibleSpending:.2f}."
+        )
+    if calibration.preferredWarningType:
+        details.append(f"Preferred warning type: {calibration.preferredWarningType}.")
+    if calibration.chudTone:
+        details.append(f"Preferred tone: {calibration.chudTone}.")
+    if calibration.interventionPreference:
+        details.append(f"Intervention preference: {calibration.interventionPreference}.")
+    if calibration.impulseCategories:
+        details.append(
+            f"Common impulse-buy categories: {_join_values(calibration.impulseCategories)}."
+        )
+    if calibration.overspendingTriggers:
+        details.append(
+            f"Common overspending triggers: {_join_values(calibration.overspendingTriggers)}."
+        )
+
+    impulse_frequency = _label_for_index(calibration.impulseFrequency, FREQUENCY_LABELS)
+    if impulse_frequency:
+        details.append(f"Impulse buying frequency: {impulse_frequency}.")
+
+    purchase_creep = _label_for_index(calibration.smallPurchaseCreep, FREQUENCY_LABELS)
+    if purchase_creep:
+        details.append(f"Small purchases add up unexpectedly: {purchase_creep}.")
+
+    budget_awareness = _label_for_index(calibration.budgetAwareness, AWARENESS_LABELS)
+    if budget_awareness:
+        details.append(f"Budget awareness while shopping: {budget_awareness}.")
+
+    alert_likelihood = _label_for_index(calibration.riskAlertLikelihood, LIKELIHOOD_LABELS)
+    if alert_likelihood:
+        details.append(f"Likelihood they listen to a warning: {alert_likelihood}.")
+
+    return " ".join(details) if details else "User calibration was provided but contains no preferences."
 
 
 @app.post("/scan")
@@ -238,6 +318,7 @@ async def scan_image(request: Request, req: ScanRequest):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid base64 image")
 
+    calibration_context = _build_scan_calibration_context(req.calibration)
     model = genai.GenerativeModel("gemini-2.5-flash")
     logger.info("Gemini scan request")
     response = model.generate_content(
@@ -245,10 +326,19 @@ async def scan_image(request: Request, req: ScanRequest):
             "Analyze this image and respond with ONLY a valid JSON object (no markdown, no code fences):\n"
             '{\n'
             '  "text": "One short paragraph. Identify the item, mention its price, '
-            'one sentence on value, and 1-2 cheaper alternatives with prices. '
+            'give a personalized purchase insight using the user calibration when relevant, '
+            'and include 1-2 cheaper alternatives with prices when they are genuinely helpful. '
             'Max 3-4 lines. Plain prose, no bullet lists, no headers.",\n'
             '  "estimated_price": 29.99\n'
             '}\n\n'
+            "User calibration for personalization:\n"
+            f"{calibration_context}\n\n"
+            "Rules for personalization:\n"
+            "- Use the calibration to tailor the advice, not to restate the profile.\n"
+            "- If the item matches the user's impulse-buy categories or spending triggers, call that out naturally.\n"
+            "- Reflect the preferred warning type and tone in the wording.\n"
+            "- Mention the savings goal only when it makes the recommendation sharper.\n"
+            "- Do not invent purchase history or certainty you do not have.\n\n"
             "Rules for estimated_price:\n"
             "- If you can see a price tag in the image, use that exact price as a float.\n"
             "- If you can confidently identify the item and estimate its retail price, use that.\n"
