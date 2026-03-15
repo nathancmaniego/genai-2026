@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Pressable,
   KeyboardAvoidingView,
+  Keyboard,
   ScrollView,
   Platform,
 } from 'react-native';
@@ -32,6 +33,7 @@ export default function StepContainer({
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         showsVerticalScrollIndicator={false}
         bounces={false}
       >
@@ -44,7 +46,14 @@ export default function StepContainer({
               !canContinue && styles.buttonDisabled,
               pressed && canContinue && styles.buttonPressed,
             ]}
-            onPress={canContinue ? onContinue : undefined}
+            onPress={
+              canContinue
+                ? () => {
+                    Keyboard.dismiss();
+                    onContinue();
+                  }
+                : undefined
+            }
           >
             <Text style={[styles.buttonText, !canContinue && styles.buttonTextDisabled]}>
               {buttonLabel}

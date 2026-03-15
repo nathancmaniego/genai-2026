@@ -24,7 +24,7 @@ export default function SavingsGoalScreen() {
   const [selected, setSelected] = useState<string[]>([]);
 
   const handleToggle = (option: string) => {
-    setSelected([option]);
+    setSelected((prev) => (prev.includes(option) ? [] : [option]));
   };
 
   const handleContinue = () => {

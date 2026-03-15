@@ -13,9 +13,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 import { useBudget } from '@/context/BudgetContext';
-import { calculateDailyFunBudget, saveApiUrl, getApiUrl, getUserProfile } from '@/services/storage';
+import { calculateDailyFunBudget, saveApiUrl, getApiUrl, getUserProfile, saveUserProfile } from '@/services/storage';
 import { setApiBaseUrl } from '@/services/api';
 import type { UserProfile } from '@/types/profile';
+import ChipSelector from '@/components/onboarding/ChipSelector';
+import ScaleSelector from '@/components/onboarding/ScaleSelector';
+import {
+  SAVINGS_GOAL_OPTIONS,
+  WARNING_OPTIONS,
+  LIKELIHOOD_LABELS,
+  TONE_OPTIONS,
+  INTERVENTION_OPTIONS,
+  TRIGGERS_OPTIONS,
+  IMPULSE_OPTIONS,
+} from '@/constants/onboarding';
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -29,6 +40,14 @@ export default function ProfileScreen() {
   const [serverUrl, setServerUrl] = useState('');
   const [serverSaved, setServerSaved] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [editingPreferences, setEditingPreferences] = useState(false);
+  const [prefSavingFor, setPrefSavingFor] = useState<string[]>([]);
+  const [prefWarning, setPrefWarning] = useState<string[]>([]);
+  const [prefTone, setPrefTone] = useState<string[]>([]);
+  const [prefIntervention, setPrefIntervention] = useState<string[]>([]);
+  const [prefTriggers, setPrefTriggers] = useState<string[]>([]);
+  const [prefImpulse, setPrefImpulse] = useState<string[]>([]);
+  const [prefLikelihood, setPrefLikelihood] = useState<number | null>(null);
 
   useEffect(() => {
     if (profile) {
@@ -44,6 +63,48 @@ export default function ProfileScreen() {
     });
     getUserProfile().then(setUserProfile);
   }, [profile]);
+
+  useEffect(() => {
+    if (editingPreferences && userProfile) {
+      setPrefSavingFor(userProfile.primarySavingsGoal ? [userProfile.primarySavingsGoal] : []);
+      setPrefWarning(userProfile.preferredWarningType ? [userProfile.preferredWarningType] : []);
+      setPrefTone(userProfile.chudTone ? [userProfile.chudTone] : []);
+      setPrefIntervention(userProfile.interventionPreference ? [userProfile.interventionPreference] : []);
+      setPrefTriggers(userProfile.overspendingTriggers?.length ? [...userProfile.overspendingTriggers] : []);
+      setPrefImpulse(userProfile.impulseCategories?.length ? [...userProfile.impulseCategories] : []);
+      setPrefLikelihood(userProfile.riskAlertLikelihood >= 0 ? userProfile.riskAlertLikelihood : null);
+    }
+  }, [editingPreferences, userProfile]);
+
+  const handleSavePreferences = async () => {
+    if (!userProfile) return;
+    const updated: UserProfile = {
+      ...userProfile,
+      primarySavingsGoal: prefSavingFor[0] ?? '',
+      preferredWarningType: prefWarning[0] ?? '',
+      chudTone: prefTone[0] ?? '',
+      interventionPreference: prefIntervention[0] ?? '',
+      overspendingTriggers: prefTriggers,
+      impulseCategories: prefImpulse,
+      riskAlertLikelihood: prefLikelihood ?? -1,
+    };
+    await saveUserProfile(updated);
+    setUserProfile(updated);
+    setEditingPreferences(false);
+  };
+
+  const handleCancelPreferences = () => {
+    if (userProfile) {
+      setPrefSavingFor(userProfile.primarySavingsGoal ? [userProfile.primarySavingsGoal] : []);
+      setPrefWarning(userProfile.preferredWarningType ? [userProfile.preferredWarningType] : []);
+      setPrefTone(userProfile.chudTone ? [userProfile.chudTone] : []);
+      setPrefIntervention(userProfile.interventionPreference ? [userProfile.interventionPreference] : []);
+      setPrefTriggers(userProfile.overspendingTriggers?.length ? [...userProfile.overspendingTriggers] : []);
+      setPrefImpulse(userProfile.impulseCategories?.length ? [...userProfile.impulseCategories] : []);
+      setPrefLikelihood(userProfile.riskAlertLikelihood >= 0 ? userProfile.riskAlertLikelihood : null);
+    }
+    setEditingPreferences(false);
+  };
 
   const handleSaveProfile = async () => {
     const inc = parseFloat(income) || 0;
@@ -230,22 +291,104 @@ export default function ProfileScreen() {
         {/* Preferences */}
         {userProfile && (
           <Animated.View entering={FadeInDown.duration(400).delay(400)} style={styles.section}>
-            <Text style={styles.sectionTitle}>preferences</Text>
-            <View style={styles.ledger}>
-              <PrefRow label="saving for" value={userProfile.primarySavingsGoal} />
-              <View style={styles.rule} />
-              <PrefRow label="tone" value={userProfile.chudTone} />
-              <View style={styles.rule} />
-              <PrefRow label="intervene" value={userProfile.interventionPreference} />
-              <View style={styles.rule} />
-              <PrefRow label="warning" value={userProfile.preferredWarningType} />
-              {userProfile.overspendingTriggers.length > 0 && (
-                <>
-                  <View style={styles.rule} />
-                  <PrefRow label="triggers" value={userProfile.overspendingTriggers.join(', ')} />
-                </>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>preferences</Text>
+              {!editingPreferences && (
+                <Pressable onPress={() => setEditingPreferences(true)}>
+                  <Text style={styles.editBtn}>edit</Text>
+                </Pressable>
               )}
             </View>
+            {editingPreferences ? (
+              <View style={styles.prefEditForm}>
+                <Text style={styles.prefEditLabel}>saving for</Text>
+                <ChipSelector
+                  options={SAVINGS_GOAL_OPTIONS}
+                  selected={prefSavingFor}
+                  onToggle={(o) => setPrefSavingFor((prev) => (prev.includes(o) ? [] : [o]))}
+                  maxSelect={1}
+                />
+                <Text style={styles.prefEditLabel}>tone</Text>
+                <ChipSelector
+                  options={TONE_OPTIONS}
+                  selected={prefTone}
+                  onToggle={(o) => setPrefTone((prev) => (prev.includes(o) ? [] : [o]))}
+                  maxSelect={1}
+                />
+                <Text style={styles.prefEditLabel}>intervene</Text>
+                <ChipSelector
+                  options={INTERVENTION_OPTIONS}
+                  selected={prefIntervention}
+                  onToggle={(o) => setPrefIntervention((prev) => (prev.includes(o) ? [] : [o]))}
+                  maxSelect={1}
+                />
+                <Text style={styles.prefEditLabel}>warning</Text>
+                <ChipSelector
+                  options={WARNING_OPTIONS}
+                  selected={prefWarning}
+                  onToggle={(o) => setPrefWarning((prev) => (prev.includes(o) ? [] : [o]))}
+                  maxSelect={1}
+                />
+                <Text style={styles.prefEditLabel}>triggers (up to 3)</Text>
+                <ChipSelector
+                  options={TRIGGERS_OPTIONS}
+                  selected={prefTriggers}
+                  onToggle={(o) =>
+                    setPrefTriggers((prev) =>
+                      prev.includes(o) ? prev.filter((x) => x !== o) : prev.length < 3 ? [...prev, o] : prev
+                    )
+                  }
+                  maxSelect={3}
+                />
+                <Text style={styles.prefEditLabel}>impulse categories (up to 3)</Text>
+                <ChipSelector
+                  options={IMPULSE_OPTIONS}
+                  selected={prefImpulse}
+                  onToggle={(o) =>
+                    setPrefImpulse((prev) =>
+                      prev.includes(o) ? prev.filter((x) => x !== o) : prev.length < 3 ? [...prev, o] : prev
+                    )
+                  }
+                  maxSelect={3}
+                />
+                <Text style={styles.prefEditLabel}>how likely to listen</Text>
+                <ScaleSelector
+                  labels={LIKELIHOOD_LABELS}
+                  selected={prefLikelihood}
+                  onSelect={setPrefLikelihood}
+                />
+                <View style={styles.editActions}>
+                  <Pressable style={[styles.actionBtn, styles.cancelBtn]} onPress={handleCancelPreferences}>
+                    <Text style={styles.cancelText}>cancel</Text>
+                  </Pressable>
+                  <Pressable style={[styles.actionBtn, styles.saveBtn]} onPress={handleSavePreferences}>
+                    <Text style={styles.saveText}>save</Text>
+                  </Pressable>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.ledger}>
+                <PrefRow label="saving for" value={userProfile.primarySavingsGoal} />
+                <View style={styles.rule} />
+                <PrefRow label="tone" value={userProfile.chudTone} />
+                <View style={styles.rule} />
+                <PrefRow label="intervene" value={userProfile.interventionPreference} />
+                <View style={styles.rule} />
+                <PrefRow label="warning" value={userProfile.preferredWarningType} />
+                {userProfile.overspendingTriggers.length > 0 && (
+                  <>
+                    <View style={styles.rule} />
+                    <PrefRow label="triggers" value={userProfile.overspendingTriggers.join(', ')} />
+                  </>
+                )}
+                {userProfile.impulseCategories.length > 0 && (
+                  <>
+                    <View style={styles.rule} />
+                    <PrefRow label="impulse" value={userProfile.impulseCategories.join(', ')} />
+                  </>
+                )}
+              </View>
+            )}
           </Animated.View>
         )}
 
@@ -426,6 +569,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.accent,
     letterSpacing: 1,
+  },
+  prefEditForm: {
+    backgroundColor: Colors.bgCard,
+    padding: Spacing.lg,
+    gap: Spacing.sm,
+    ...superellipse(Radii.xl),
+  },
+  prefEditLabel: {
+    fontFamily: Fonts.mono,
+    fontSize: 11,
+    color: Colors.textMuted,
+    letterSpacing: 1,
+    marginTop: Spacing.xs,
   },
 
   // Ledger
