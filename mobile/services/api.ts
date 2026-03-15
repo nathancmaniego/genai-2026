@@ -57,8 +57,10 @@ export async function analyzeFrame(
 }
 
 export interface GestureResponse {
-  gesture: 'open_palm' | 'fist' | 'none';
+  gesture: 'open_palm' | 'thumbs_up' | 'thumbs_down' | 'fist' | 'none';
   palm_open: boolean;
+  thumbs_up: boolean;
+  thumbs_down: boolean;
 }
 
 export async function detectGesture(

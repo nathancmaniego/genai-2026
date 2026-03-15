@@ -103,10 +103,20 @@ export default function HudScreen() {
     setScanResult(null);
   }, [deductFromBalance]);
 
+  const thumbsActedRef = useRef(false);
+
+  useEffect(() => {
+    thumbsActedRef.current = false;
+  }, [scanResult]);
+
   useEffect(() => {
     pollingRef.current = setInterval(async () => {
-      const skip = !cameraRef.current || scanning || result || scanResultRef.current || gestureActiveRef.current;
-      if (skip) return;
+      if (!cameraRef.current || scanning || result) return;
+
+      const awaitingConfirm = scanResultRef.current?.estimatedPrice != null;
+
+      if (!awaitingConfirm && (scanResultRef.current || gestureActiveRef.current)) return;
+
       try {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
@@ -115,11 +125,23 @@ export default function HudScreen() {
         });
         if (!photo?.base64) return;
 
-        const { palm_open } = await detectGesture(photo.base64);
+        const gesture = await detectGesture(photo.base64);
 
-        if (palm_open && !gestureActiveRef.current) {
-          gestureActiveRef.current = true;
-          simulatePalmStart();
+        if (awaitingConfirm) {
+          if (thumbsActedRef.current) return;
+          const price = scanResultRef.current!.estimatedPrice!;
+          if (gesture.thumbs_up) {
+            thumbsActedRef.current = true;
+            handleScanConfirm(price);
+          } else if (gesture.thumbs_down) {
+            thumbsActedRef.current = true;
+            handleDismiss();
+          }
+        } else {
+          if (gesture.palm_open && !gestureActiveRef.current) {
+            gestureActiveRef.current = true;
+            simulatePalmStart();
+          }
         }
       } catch {
         // gesture polling is best-effort
@@ -129,7 +151,7 @@ export default function HudScreen() {
     return () => {
       if (pollingRef.current) clearInterval(pollingRef.current);
     };
-  }, [scanning, result, simulatePalmStart]);
+  }, [scanning, result, simulatePalmStart, handleScanConfirm, handleDismiss]);
 
   const handlePalmEnd = useCallback(() => {
     gestureActiveRef.current = false;

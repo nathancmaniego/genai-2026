@@ -144,19 +144,44 @@ async def detect_gesture(req: GestureRequest):
     results = hands_detector.detect(mp_image)
 
     if not results.hand_landmarks:
-        return {"gesture": "none", "palm_open": False}
+        return {"gesture": "none", "palm_open": False, "thumbs_up": False, "thumbs_down": False}
 
     landmarks = results.hand_landmarks[0]
+
+    NON_THUMB_TIPS = [8, 12, 16, 20]
+    NON_THUMB_MCPS = [5, 9, 13, 17]
+
     fingers_up = sum(
         1 for tip, mcp in zip(FINGERTIP_IDS, MCP_IDS)
         if landmarks[tip].y < landmarks[mcp].y
     )
-
     palm_open = fingers_up >= 4
 
+    other_fingers_curled = all(
+        landmarks[tip].y >= landmarks[mcp].y
+        for tip, mcp in zip(NON_THUMB_TIPS, NON_THUMB_MCPS)
+    )
+
+    thumb_up = landmarks[4].y < landmarks[3].y
+    thumb_down = landmarks[4].y > landmarks[3].y
+
+    thumbs_up = thumb_up and other_fingers_curled and not palm_open
+    thumbs_down = thumb_down and other_fingers_curled and not palm_open
+
+    if palm_open:
+        gesture = "open_palm"
+    elif thumbs_up:
+        gesture = "thumbs_up"
+    elif thumbs_down:
+        gesture = "thumbs_down"
+    else:
+        gesture = "fist"
+
     return {
-        "gesture": "open_palm" if palm_open else "fist",
+        "gesture": gesture,
         "palm_open": palm_open,
+        "thumbs_up": thumbs_up,
+        "thumbs_down": thumbs_down,
     }
 
 
