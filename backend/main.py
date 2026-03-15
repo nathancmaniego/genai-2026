@@ -329,7 +329,8 @@ async def scan_image(request: Request, req: ScanRequest):
             'give a personalized purchase insight using the user calibration when relevant, '
             'and include 1-2 cheaper alternatives with prices when they are genuinely helpful. '
             'Max 3-4 lines. Plain prose, no bullet lists, no headers.",\n'
-            '  "estimated_price": 29.99\n'
+            '  "estimated_price": 29.99,\n'
+            '  "rating": "good"\n'
             '}\n\n'
             "User calibration for personalization:\n"
             f"{calibration_context}\n\n"
@@ -343,7 +344,12 @@ async def scan_image(request: Request, req: ScanRequest):
             "- If you can see a price tag in the image, use that exact price as a float.\n"
             "- If you can confidently identify the item and estimate its retail price, use that.\n"
             "- If you cannot determine a specific price, set estimated_price to null.\n"
-            "- Always round to 2 decimal places when providing a price.",
+            "- Always round to 2 decimal places when providing a price.\n\n"
+            'Rules for rating (required, exactly one of these three strings):\n'
+            '- "bad": This purchase is a poor fit for the user—e.g. conflicts with goals, triggers, or budget, or is clearly impulsive given their profile.\n'
+            '- "okay": This purchase is borderline—acceptable but not ideal, or neutral given their profile and spending ability.\n'
+            '- "good": This purchase fits the user—aligned with budget, goals, and preferences, or a reasonable choice given their profile.\n'
+            '- Base the rating on the user calibration, spending preferences, and ability. Output only "bad", "okay", or "good".',
             {"mime_type": "image/jpeg", "data": image_bytes},
         ]
     )
@@ -355,7 +361,7 @@ async def scan_image(request: Request, req: ScanRequest):
         scan_result = json.loads(raw)
     except (json.JSONDecodeError, IndexError):
         logger.warning("Gemini scan: failed to parse JSON, using raw text")
-        return {"text": response.text.strip(), "estimated_price": None}
+        return {"text": response.text.strip(), "estimated_price": None, "rating": "okay"}
 
     result_text = scan_result.get("text", response.text.strip())
     estimated_price = scan_result.get("estimated_price")
@@ -365,8 +371,11 @@ async def scan_image(request: Request, req: ScanRequest):
         except (ValueError, TypeError):
             estimated_price = None
 
-    logger.info("Gemini scan ok", extra={"response_length": len(result_text), "estimated_price": estimated_price})
-    return {"text": result_text, "estimated_price": estimated_price}
+    raw_rating = (scan_result.get("rating") or "okay").strip().lower()
+    rating = raw_rating if raw_rating in ("bad", "okay", "good") else "okay"
+
+    logger.info("Gemini scan ok", extra={"response_length": len(result_text), "estimated_price": estimated_price, "rating": rating})
+    return {"text": result_text, "estimated_price": estimated_price, "rating": rating}
 
 
 @app.post("/analyze")

@@ -222,6 +222,7 @@ export default function HudScreen() {
           <ScanResultOverlay
             text={scanResult.text}
             price={scanResult.estimatedPrice}
+            rating={scanResult.rating}
             onConfirm={handleScanConfirm}
             onDismiss={handleDismiss}
           />

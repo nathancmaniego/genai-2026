@@ -14,16 +14,24 @@ function formatScanText(raw: string): string {
     .trim();
 }
 
+const RATING_BORDER = {
+  bad: Colors.red,
+  okay: '#E6B800',
+  good: Colors.green,
+} as const;
+
 interface Props {
   text: string;
   price: number | null;
+  rating: 'bad' | 'okay' | 'good';
   onConfirm: (price: number) => void;
   onDismiss: () => void;
 }
 
-export default function ScanResultOverlay({ text, price, onConfirm, onDismiss }: Props) {
+export default function ScanResultOverlay({ text, price, rating, onConfirm, onDismiss }: Props) {
   const formatted = formatScanText(text);
   const hasPrice = price != null;
+  const borderColor = RATING_BORDER[rating];
 
   const [countdownLeft, setCountdownLeft] = useState(hasPrice ? CONFIRM_COUNTDOWN_MS : 0);
 
@@ -74,8 +82,8 @@ export default function ScanResultOverlay({ text, price, onConfirm, onDismiss }:
   const cardContent = (
     <>
       <View style={styles.header}>
-        <View style={styles.dot} />
-        <Text style={styles.label}>SCAN</Text>
+        <View style={[styles.dot, { backgroundColor: borderColor }]} />
+        <Text style={[styles.label, { color: borderColor }]}>SCAN</Text>
       </View>
 
       <Text style={styles.body}>{formatted}</Text>
@@ -115,9 +123,9 @@ export default function ScanResultOverlay({ text, price, onConfirm, onDismiss }:
         style={styles.card}
       >
         {hasPrice ? (
-          <View style={styles.cardInner}>{cardContent}</View>
+          <View style={[styles.cardInner, { borderColor }]}>{cardContent}</View>
         ) : (
-          <Pressable style={styles.cardInner} onPress={onDismiss}>
+          <Pressable style={[styles.cardInner, { borderColor }]} onPress={onDismiss}>
             {cardContent}
           </Pressable>
         )}

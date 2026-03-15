@@ -76,9 +76,12 @@ export async function detectGesture(
   return res.json();
 }
 
+export type ScanRating = 'bad' | 'okay' | 'good';
+
 export interface ScanResponse {
   text: string;
   estimatedPrice: number | null;
+  rating: ScanRating;
 }
 
 export async function scanImage(
@@ -95,9 +98,13 @@ export async function scanImage(
   });
   if (!res.ok) throw new Error(`Scan error: ${res.status}`);
   const data = await res.json();
+  const rawRating = data?.rating?.toLowerCase?.();
+  const rating: ScanRating =
+    rawRating === 'bad' || rawRating === 'okay' || rawRating === 'good' ? rawRating : 'okay';
   return {
     text: (data?.text != null) ? String(data.text) : '',
     estimatedPrice: data?.estimated_price ?? null,
+    rating,
   };
 }
 
