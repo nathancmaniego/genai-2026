@@ -265,14 +265,18 @@ def _build_scan_calibration_context(calibration: ScanCalibration | None) -> str:
 
     details: list[str] = []
 
+    if calibration.monthlyFlexibleSpending > 0:
+        daily_budget = round(calibration.monthlyFlexibleSpending / 30, 2)
+        details.append(
+            f"Daily budget for essential / day-to-day purchases (e.g. food, coffee, small daily items): ~${daily_budget:.2f} per day."
+        )
+        details.append(
+            f"Monthly budget for non-essential / discretionary purchases (e.g. electronics, luxury, one-off bigger buys): ${calibration.monthlyFlexibleSpending:.2f} per month."
+        )
     if calibration.primarySavingsGoal:
         details.append(f"Primary savings goal: {calibration.primarySavingsGoal}.")
     if calibration.monthlySavingsGoal > 0:
         details.append(f"Monthly savings target: ${calibration.monthlySavingsGoal:.2f}.")
-    if calibration.monthlyFlexibleSpending > 0:
-        details.append(
-            f"Monthly flexible spending target: ${calibration.monthlyFlexibleSpending:.2f}."
-        )
     if calibration.preferredWarningType:
         details.append(f"Preferred warning type: {calibration.preferredWarningType}.")
     if calibration.chudTone:
@@ -346,10 +350,15 @@ async def scan_image(request: Request, req: ScanRequest):
             "- If you cannot determine a specific price, set estimated_price to null.\n"
             "- Always round to 2 decimal places when providing a price.\n\n"
             'Rules for rating (required, exactly one of these three strings):\n'
-            '- "bad": This purchase is a poor fit for the user—e.g. conflicts with goals, triggers, or budget, or is clearly impulsive given their profile.\n'
-            '- "okay": This purchase is borderline—acceptable but not ideal, or neutral given their profile and spending ability.\n'
-            '- "good": This purchase fits the user—aligned with budget, goals, and preferences, or a reasonable choice given their profile.\n'
-            '- Base the rating on the user calibration, spending preferences, and ability. Output only "bad", "okay", or "good".',
+            '1. First classify the purchase type:\n'
+            '- Daily/essential: food, coffee, groceries, routine small necessities, things people buy often within a day (compare against the DAILY budget).\n'
+            '- Non-essential/larger: electronics, luxury items, one-off bigger purchases, non-essential wants e.g. a PS5 controller (compare against the MONTHLY discretionary budget).\n'
+            '2. Then rate using the right budget:\n'
+            '- For daily/essential items: does the price fit sensibly within the user\'s daily budget for such items? Rate "bad" if it blows the day, "okay" if borderline, "good" if it fits.\n'
+            '- For non-essential items: does the price fit within the user\'s monthly budget for discretionary spending? Rate "bad" if it strains the month or is clearly impulsive, "okay" if borderline, "good" if it fits.\n'
+            '- "bad": Poor fit—over the relevant budget (daily or monthly), conflicts with goals/triggers, or clearly impulsive.\n'
+            '- "okay": Borderline—acceptable but not ideal for the relevant budget.\n'
+            '- "good": Fits—aligned with the relevant budget and the user\'s profile. Output only "bad", "okay", or "good".',
             {"mime_type": "image/jpeg", "data": image_bytes},
         ]
     )
