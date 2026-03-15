@@ -60,8 +60,23 @@ You MUST respond in valid JSON with exactly these fields:
 {
   "item": "Name of the identified item",
   "estimated_price": 29.99,
+  "analysis": "Two sentences. First: what the product is. Second: a sharp purchase insight.",
+  "alternatives": [
+    {"name": "Cheaper Option A", "price": 19.99},
+    {"name": "Cheaper Option B", "price": 24.99}
+  ],
   "voice_line": "A deadpan one-liner about the purchase decision"
 }
+
+Rules for analysis:
+- Exactly 2 sentences. First sentence identifies the product briefly. Second sentence gives a purchase-relevant insight (value, durability, resale, hype tax, etc).
+- Be concise and useful. No fluff.
+
+Rules for alternatives:
+- Provide 1-3 cheaper alternatives to the identified item.
+- Each alternative must have a "name" and a "price" (float, 2 decimal places).
+- Alternatives should be real, well-known products in the same category.
+- If the item is already very cheap (under $5), return an empty array [].
 
 Rules for the voice_line:
 - If the user CAN afford it: curt approval. Example: "Green light. Your budget survives another day."
@@ -145,6 +160,36 @@ async def detect_gesture(req: GestureRequest):
     }
 
 
+class ScanRequest(BaseModel):
+    image: str
+
+
+@app.post("/scan")
+async def scan_image(req: ScanRequest):
+    if not os.getenv("GEMINI_API_KEY"):
+        raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
+
+    try:
+        image_bytes = base64.b64decode(req.image)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid base64 image")
+
+    model = genai.GenerativeModel("gemini-2.5-flash")
+
+    response = model.generate_content(
+        [
+            "One short paragraph only. Identify the item, give one price (e.g. $X or $X–$Y), "
+            "one sentence on value, and 1–2 cheaper alternatives with prices. "
+            "Max 3–4 lines total. No bullet lists, no headers, no intro. Plain prose.",
+            {"mime_type": "image/jpeg", "data": image_bytes},
+        ]
+    )
+
+    result_text = response.text.strip()
+    print(f"[SCAN] Gemini response ({len(result_text)} chars):\n{result_text}\n---")
+    return {"text": result_text}
+
+
 @app.post("/analyze")
 async def analyze_frame(req: AnalyzeRequest):
     if not os.getenv("GEMINI_API_KEY"):
@@ -163,7 +208,7 @@ async def analyze_frame(req: AnalyzeRequest):
         f"Savings goal: ${req.budget.savings_goal:.2f}."
     )
 
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    model = genai.GenerativeModel("google/gemma-3-1b-it")
 
     response = model.generate_content(
         [
@@ -187,6 +232,13 @@ async def analyze_frame(req: AnalyzeRequest):
     item_name = ai_result.get("item", "Unknown Item")
     estimated_price = float(ai_result.get("estimated_price", 0))
     voice_line = ai_result.get("voice_line", "No comment.")
+    analysis = ai_result.get("analysis", "")
+    raw_alternatives = ai_result.get("alternatives", [])
+    alternatives = [
+        {"name": a.get("name", ""), "price": float(a.get("price", 0))}
+        for a in raw_alternatives
+        if isinstance(a, dict) and a.get("name")
+    ]
 
     can_afford = req.budget.current_balance >= estimated_price
     funds_remaining = req.budget.current_balance - estimated_price
@@ -212,6 +264,8 @@ async def analyze_frame(req: AnalyzeRequest):
         "canAfford": can_afford,
         "fundsRemaining": round(funds_remaining, 2),
         "voiceLine": voice_line,
+        "analysis": analysis,
+        "alternatives": alternatives,
         "audioUrl": audio_url,
         "severity": severity,
     }

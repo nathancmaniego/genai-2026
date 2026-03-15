@@ -4,12 +4,13 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Audio } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { useBudget } from '@/context/BudgetContext';
-import { analyzeFrame, AnalyzeResponse, setApiBaseUrl, detectGesture } from '@/services/api';
+import { analyzeFrame, AnalyzeResponse, setApiBaseUrl, detectGesture, scanImage } from '@/services/api';
 import { getApiUrl } from '@/services/storage';
 import Reticle from '@/components/Reticle';
 import ScanningBar from '@/components/ScanningBar';
 import BudgetTicker from '@/components/BudgetTicker';
 import DecisionOverlay from '@/components/DecisionOverlay';
+import ScanResultOverlay from '@/components/ScanResultOverlay';
 import { Colors, Fonts, Radii, superellipse } from '@/constants/theme';
 
 const PALM_HOLD_DURATION = 1200;
@@ -26,11 +27,14 @@ export default function HudScreen() {
   const [scanProgress, setScanProgress] = useState(0);
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState<AnalyzeResponse | null>(null);
+  const [geminiText, setGeminiText] = useState<string | null>(null);
 
   const palmTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const palmStartRef = useRef<number>(0);
   const gestureActiveRef = useRef(false);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const geminiTextRef = useRef<string | null>(null);
+  geminiTextRef.current = geminiText;
 
   useEffect(() => {
     getApiUrl().then((url) => {
@@ -65,7 +69,7 @@ export default function HudScreen() {
   }, []);
 
   const triggerScan = useCallback(async () => {
-    if (!cameraRef.current || !profile) return;
+    if (!cameraRef.current) return;
     setScanning(true);
     setPalmDetected(false);
 
@@ -73,13 +77,8 @@ export default function HudScreen() {
       const photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.5 });
       if (!photo?.base64) throw new Error('Failed to capture frame');
 
-      const response = await analyzeFrame(photo.base64, profile);
-      setResult(response);
-
-      if (response.audioUrl) {
-        const { sound } = await Audio.Sound.createAsync({ uri: response.audioUrl });
-        await sound.playAsync();
-      }
+      const text = await scanImage(photo.base64);
+      setGeminiText(text ?? '');
     } catch (err: any) {
       Alert.alert('scan failed', err.message || 'Could not analyze the frame.');
     } finally {
@@ -87,7 +86,7 @@ export default function HudScreen() {
       setScanProgress(0);
       gestureActiveRef.current = false;
     }
-  }, [profile]);
+  }, []);
 
   const handleDismiss = useCallback(() => {
     if (result && result.canAfford) {
@@ -95,11 +94,16 @@ export default function HudScreen() {
     }
     gestureActiveRef.current = false;
     setResult(null);
+    setGeminiText(null);
   }, [result, deductFromBalance]);
 
   useEffect(() => {
     pollingRef.current = setInterval(async () => {
-      if (!cameraRef.current || scanning || result || gestureActiveRef.current) return;
+      const skip = !cameraRef.current || scanning || result || geminiTextRef.current || gestureActiveRef.current;
+      // #region agent log
+      fetch('http://127.0.0.1:7372/ingest/f5f8c5bd-217f-4878-839d-5d3ac34bab0e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8110b2'},body:JSON.stringify({sessionId:'8110b2',location:'hud:poll',message:'poll_tick',data:{skip,hasGeminiText:!!geminiTextRef.current,gestureActive:gestureActiveRef.current},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+      // #endregion
+      if (skip) return;
       try {
         const photo = await cameraRef.current.takePictureAsync({
           base64: true,
@@ -108,24 +112,14 @@ export default function HudScreen() {
         });
         if (!photo?.base64) return;
 
-        // #region agent log
-        fetch('http://127.0.0.1:7372/ingest/f5f8c5bd-217f-4878-839d-5d3ac34bab0e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8110b2'},body:JSON.stringify({sessionId:'8110b2',location:'hud/index.tsx:poll',message:'gesture_poll_fire',data:{hasPhoto:!!photo.base64,photoLen:photo.base64?.length},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-        // #endregion
-
         const { palm_open } = await detectGesture(photo.base64);
-
-        // #region agent log
-        fetch('http://127.0.0.1:7372/ingest/f5f8c5bd-217f-4878-839d-5d3ac34bab0e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8110b2'},body:JSON.stringify({sessionId:'8110b2',location:'hud/index.tsx:poll',message:'gesture_response',data:{palm_open},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-        // #endregion
 
         if (palm_open && !gestureActiveRef.current) {
           gestureActiveRef.current = true;
           simulatePalmStart();
         }
-      } catch (e: any) {
-        // #region agent log
-        fetch('http://127.0.0.1:7372/ingest/f5f8c5bd-217f-4878-839d-5d3ac34bab0e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8110b2'},body:JSON.stringify({sessionId:'8110b2',location:'hud/index.tsx:poll',message:'gesture_poll_error',data:{error:e?.message ?? String(e)},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-        // #endregion
+      } catch {
+        // gesture polling is best-effort
       }
     }, GESTURE_POLL_MS);
 
@@ -190,6 +184,10 @@ export default function HudScreen() {
             dailyBudget={profile.dailyFunBudget}
           />
         )}
+
+        {geminiText ? (
+          <ScanResultOverlay text={geminiText} onDismiss={handleDismiss} />
+        ) : null}
 
         {result && <DecisionOverlay result={result} onDismiss={handleDismiss} />}
       </CameraView>

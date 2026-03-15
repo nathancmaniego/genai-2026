@@ -17,12 +17,19 @@ export async function initializeBudget(profile: BudgetProfile) {
   return res.json();
 }
 
+export interface Alternative {
+  name: string;
+  price: number;
+}
+
 export interface AnalyzeResponse {
   item: string;
   estimatedPrice: number;
   canAfford: boolean;
   fundsRemaining: number;
   voiceLine: string;
+  analysis: string;
+  alternatives: Alternative[];
   audioUrl: string | null;
   severity: 'green' | 'yellow' | 'red';
 }
@@ -64,6 +71,19 @@ export async function detectGesture(
   });
   if (!res.ok) throw new Error(`Gesture error: ${res.status}`);
   return res.json();
+}
+
+export async function scanImage(
+  base64Image: string
+): Promise<string> {
+  const res = await fetch(`${apiBaseUrl}/scan`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ image: base64Image }),
+  });
+  if (!res.ok) throw new Error(`Scan error: ${res.status}`);
+  const data = await res.json();
+  return (data?.text != null) ? String(data.text) : '';
 }
 
 export async function getScanHistory() {

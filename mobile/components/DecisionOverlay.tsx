@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import Animated, { FadeIn, FadeOut, SlideInDown } from 'react-native-reanimated';
 import { Colors, Fonts, Spacing, Radii, superellipse } from '@/constants/theme';
 import type { AnalyzeResponse } from '@/services/api';
@@ -11,6 +11,7 @@ interface Props {
 export default function DecisionOverlay({ result, onDismiss }: Props) {
   const isAffordable = result.canAfford;
   const accentColor = isAffordable ? Colors.accent : Colors.red;
+  const hasAlternatives = result.alternatives && result.alternatives.length > 0;
 
   return (
     <Animated.View entering={FadeIn.duration(250)} exiting={FadeOut.duration(150)} style={styles.backdrop}>
@@ -30,10 +31,31 @@ export default function DecisionOverlay({ result, onDismiss }: Props) {
           ${result.estimatedPrice.toFixed(2)}
         </Text>
 
-        {/* Voice Line */}
-        <View style={styles.quoteWrap}>
-          <Text style={styles.quoteText}>"{result.voiceLine}"</Text>
-        </View>
+        {/* Analysis */}
+        {result.analysis ? (
+          <View style={styles.analysisWrap}>
+            <Text style={styles.analysisText}>{result.analysis}</Text>
+          </View>
+        ) : null}
+
+        {/* Alternatives */}
+        {hasAlternatives ? (
+          <View style={styles.altSection}>
+            <Text style={styles.altLabel}>CHEAPER ALTERNATIVES</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.altScroll}
+            >
+              {result.alternatives.map((alt, i) => (
+                <View key={i} style={styles.altChip}>
+                  <Text style={styles.altName} numberOfLines={1}>{alt.name}</Text>
+                  <Text style={styles.altPrice}>${alt.price.toFixed(2)}</Text>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        ) : null}
 
         {/* Remainder */}
         <View style={styles.remainderRow}>
@@ -105,17 +127,51 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     letterSpacing: -1,
   },
-  quoteWrap: {
+  analysisWrap: {
     backgroundColor: Colors.bgElevated,
     padding: Spacing.md,
     ...superellipse(Radii.md),
   },
-  quoteText: {
+  analysisText: {
     fontFamily: Fonts.mono,
     fontSize: 13,
     color: Colors.textSecondary,
-    fontStyle: 'italic',
     lineHeight: 20,
+  },
+  altSection: {
+    gap: Spacing.sm,
+  },
+  altLabel: {
+    fontFamily: Fonts.mono,
+    fontSize: 10,
+    fontWeight: '600',
+    color: Colors.textMuted,
+    letterSpacing: 2,
+  },
+  altScroll: {
+    gap: Spacing.sm,
+  },
+  altChip: {
+    backgroundColor: Colors.bgElevated,
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    ...superellipse(Radii.sm),
+    gap: 4,
+  },
+  altName: {
+    fontFamily: Fonts.mono,
+    fontSize: 12,
+    fontWeight: '600',
+    color: Colors.white,
+    maxWidth: 160,
+  },
+  altPrice: {
+    fontFamily: Fonts.mono,
+    fontSize: 14,
+    fontWeight: '700',
+    color: Colors.accent,
   },
   remainderRow: {
     flexDirection: 'row',
