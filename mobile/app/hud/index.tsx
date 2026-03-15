@@ -90,6 +90,9 @@ export default function HudScreen() {
   }, []);
 
   const handleDismiss = useCallback(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7384/ingest/5d9625a9-e8b7-4570-ae8d-a065c26734cd',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'74243f'},body:JSON.stringify({sessionId:'74243f',location:'index.tsx:handleDismiss',message:'handleDismiss called - about to setScanResult(null)',data:{hasResult:!!result},timestamp:Date.now(),hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
     if (result && result.canAfford) {
       deductFromBalance(result.estimatedPrice);
     }

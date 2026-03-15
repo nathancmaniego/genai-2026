@@ -27,8 +27,15 @@ export default function ScanResultOverlay({ text, price, onConfirm, onDismiss }:
 
   const [countdownLeft, setCountdownLeft] = useState(hasPrice ? CONFIRM_COUNTDOWN_MS : 0);
 
+  // #region agent log
+  fetch('http://127.0.0.1:7384/ingest/5d9625a9-e8b7-4570-ae8d-a065c26734cd',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'74243f'},body:JSON.stringify({sessionId:'74243f',location:'ScanResultOverlay.tsx:mount',message:'ScanResultOverlay mounted',data:{hasPrice,price,countdownLeft:hasPrice?CONFIRM_COUNTDOWN_MS:0},timestamp:Date.now(),hypothesisId:'A,B,D'})}).catch(()=>{});
+  // #endregion
+
   useEffect(() => {
     if (!hasPrice) {
+      // #region agent log
+      fetch('http://127.0.0.1:7384/ingest/5d9625a9-e8b7-4570-ae8d-a065c26734cd',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'74243f'},body:JSON.stringify({sessionId:'74243f',location:'ScanResultOverlay.tsx:effect1-noprice',message:'No price - setting auto dismiss timeout',data:{hasPrice},timestamp:Date.now(),hypothesisId:'D'})}).catch(()=>{});
+      // #endregion
       const t = setTimeout(onDismiss, AUTO_DISMISS_MS);
       return () => clearTimeout(t);
     }
@@ -37,18 +44,30 @@ export default function ScanResultOverlay({ text, price, onConfirm, onDismiss }:
 
   useEffect(() => {
     if (!hasPrice) return;
+    // #region agent log
+    fetch('http://127.0.0.1:7384/ingest/5d9625a9-e8b7-4570-ae8d-a065c26734cd',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'74243f'},body:JSON.stringify({sessionId:'74243f',location:'ScanResultOverlay.tsx:effect2-start',message:'Starting countdown interval',data:{hasPrice},timestamp:Date.now(),hypothesisId:'C'})}).catch(()=>{});
+    // #endregion
     const t = setInterval(() => {
       setCountdownLeft((prev) => {
         const next = prev - COUNTDOWN_TICK_MS;
         if (next <= 0) {
-          onDismiss();
+          clearInterval(t);
           return 0;
         }
         return next;
       });
     }, COUNTDOWN_TICK_MS);
     return () => clearInterval(t);
-  }, [hasPrice, onDismiss]);
+  }, [hasPrice]);
+
+  useEffect(() => {
+    if (hasPrice && countdownLeft <= 0) {
+      // #region agent log
+      fetch('http://127.0.0.1:7384/ingest/5d9625a9-e8b7-4570-ae8d-a065c26734cd',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'74243f'},body:JSON.stringify({sessionId:'74243f',location:'ScanResultOverlay.tsx:countdown-dismiss-effect',message:'Countdown hit 0 - calling onDismiss from useEffect (safe)',data:{countdownLeft,hasPrice},timestamp:Date.now(),hypothesisId:'A-fix'})}).catch(()=>{});
+      // #endregion
+      onDismiss();
+    }
+  }, [countdownLeft, hasPrice, onDismiss]);
 
   const countdownProgress = hasPrice ? countdownLeft / CONFIRM_COUNTDOWN_MS : 1;
 
